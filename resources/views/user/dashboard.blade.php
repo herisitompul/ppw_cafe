@@ -118,7 +118,7 @@
                         <a href="#">
                             <img src="{{ asset('gambar/' . $produk->gambar) }}" class="card-img-top mt-2" alt="{{ $produk->judul }}" style="height: 130px; object-fit: cover; width: 100%; display: block; margin: 0 auto;">
                         </a>
-                        </div>  
+                        </div>
                         <div class="card-body">
                             <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">{{ $produk->judul }}</p>
                             <p class="card-text">{{ $produk->deskripsi }}</p>
