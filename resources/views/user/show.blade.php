@@ -144,7 +144,7 @@
                         </div>
                         @endforeach
                     </div>
-                </div>
+                </div>   
             </section> --}}
             <section>
                 <div class="d-flex justify-content-center" style="margin-bottom: 10%;">
