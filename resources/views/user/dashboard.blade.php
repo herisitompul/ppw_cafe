@@ -107,7 +107,7 @@
     </section>
 
     <!-- Product Section -->
-    <h2 class="text-center mb-3">Apa aja nih yang enak di DelCafe?</h2>
+    {{-- <h2 class="text-center mb-3">Apa aja nih yang enak di DelCafe?</h2>
     <section>
         <div class="container">
             <div class="row">
@@ -118,7 +118,7 @@
                         <a href="#">
                             <img src="{{ asset('gambar/' . $produk->gambar) }}" class="card-img-top mt-2" alt="{{ $produk->judul }}" style="height: 130px; object-fit: cover; width: 100%; display: block; margin: 0 auto;">
                         </a>
-                        </div>  
+                        </div>
                         <div class="card-body">
                             <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">{{ $produk->judul }}</p>
                             <p class="card-text">{{ $produk->deskripsi }}</p>
@@ -129,7 +129,40 @@
                 @endforeach
             </div>
         </div>
-    </section>
+    </section> --}}
+
+    <!-- Product Section -->
+<h2 class="text-center mb-3">Apa aja nih yang enak di DelCafe?</h2>
+<section>
+    <div class="container">
+        <div class="row">
+            @foreach ($produks as $produk)
+            <div class="col-md-3 mb-4">
+                <div class="card h-100" style="width: 100%;">
+                    <div class="container">
+                        <!-- Link ke halaman detail produk -->
+                        <a href="{{ route('user.show', $produk->id) }}">
+                            <img src="{{ asset('gambar/' . $produk->gambar) }}" class="card-img-top mt-2" alt="{{ $produk->judul }}" style="height: 130px; object-fit: cover; width: 100%; display: block; margin: 0 auto;">
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">
+                            <!-- Link ke halaman detail produk pada judul -->
+                            <a href="{{ route('user.show', $produk->id) }}" style="text-decoration: none; color: black;">
+                                {{ $produk  ->judul }}
+                            </a>
+                        </p>
+                        <!-- Deskripsi Singkat -->
+                        <p class="card-text">{{ Str::limit($produk->deskripsi, 50) }}</p>
+                        <p class="card-text">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</section>
+
 
     <!-- Footer -->
     <footer class="footer">

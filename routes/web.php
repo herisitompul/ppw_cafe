@@ -40,6 +40,8 @@ Route::resource('kategori', KategoriController::class);
 
 // routes/web.php
 Route::get('/user/dashboard', [ProdukController::class, 'dashboard'])->name('user.dashboard');
+Route::get('/user/index', [ProdukController::class, 'index'])->name('user.index');
+Route::get('/user/show/{id}', [ProdukController::class, 'show'])->name('user.show');
 
 
 
