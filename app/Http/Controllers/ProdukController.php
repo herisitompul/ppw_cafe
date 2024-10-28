@@ -60,7 +60,7 @@ class ProdukController extends Controller
     // Hapus produk
     public function destroy(Produk $produk)
     {
-        $produk = Produk::findOrFail($id);
+        // $produk = Produk::findOrFail($id);
         // Hapus file gambar dari folder
         if (file_exists(public_path('gambar/' . $produk->gambar))) {
             unlink(public_path('gambar/' . $produk->gambar));
@@ -162,4 +162,9 @@ public function dashboard()
     return view('user.dashboard', compact('produks'));
 }
 
+public function categori()
+{
+    $produks = Produk::all(); // Ambil semua produk dari database
+    return view('user.categori', compact('produks'));
+}
 }

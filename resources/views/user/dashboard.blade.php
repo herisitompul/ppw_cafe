@@ -86,20 +86,20 @@
         <h2 class="mb-4">Aneka kuliner menarik</h2>
         <div class="d-flex justify-content-center">
             <div class="culinary-item mx-3">
-                <a href="#">
-                    <img src="{{ asset('kategoris/makanan.png') }}" class="rounded-circle" alt="Makanan" width="130">
+                <a href="{{ route('user.categori') }}">
+                    <img src="{{ asset('kategoris/makanan.png') }}" class="rounded-circle" alt="Makanan" width="170">
                 </a>
                 <p>Makanan</p>
             </div>
             <div class="culinary-item mx-3">
                 <a href="#">
-                    <img src="{{ asset('kategoris/snack.png') }}" class="rounded-circle" alt="Snack" width="130">
+                    <img src="{{ asset('kategoris/snack.png') }}" class="rounded-circle" alt="Snack" width="170">
                 </a>
                 <p>Snack</p>
             </div>
             <div class="culinary-item mx-3">
                 <a href="#">
-                    <img src="{{ asset('kategoris/minuman.png') }}" class="rounded-circle" alt="Minuman" width="130">
+                    <img src="{{ asset('kategoris/minuman.png') }}" class="rounded-circle" alt="Minuman" width="170">
                 </a>
                 <p>Minuman</p>
             </div>
