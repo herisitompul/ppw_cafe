@@ -4,7 +4,7 @@ use App\Http\Middleware\Admin\AuthMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\AuthController;
-
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\KategoriController;
 
@@ -34,7 +34,10 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
 // Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
 // Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
 // Route::get('/kategori/{id}', [KategoriController::class, 'show'])->name('kategori.show');
-
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/produk', [ProdukController::class, 'index'])->middleware('auth');
 Route::resource('produk', ProdukController::class);
 Route::resource('kategori', KategoriController::class);
 
