@@ -158,13 +158,29 @@ public function update(Request $request, $id)
 
 public function dashboard()
 {
+    $kategori = Kategori::all();
     $produks = Produk::all(); // Ambil semua produk dari database
-    return view('user.dashboard', compact('produks'));
+    return view('user.dashboard', compact('kategori', 'produks'));
 }
 
-public function categori()
+public function show($id)
 {
-    $produks = Produk::all(); // Ambil semua produk dari database
-    return view('user.categori', compact('produks'));
+    $produk = Produk::with('kategori')->findOrFail($id);
+    // Mengambil produk lain dari kategori yang sama
+    $produks = Produk::where('kategori_id', $produk->kategori_id)
+                    ->where('id', '!=', $produk->id) // Menghindari produk yang sama
+                    // ->take() // Mengambil 4 produk
+                    ->get();
+    return view('user.show', compact('produk', 'produks'));
 }
+
+public function kategoriProduk($id)
+{
+    $kategori = Kategori::findOrFail($id); // Get the category by ID
+    $produks = Produk::where('kategori_id', $id)->get(); // Get all products in this category
+
+    return view('user.kategori', compact('kategori', 'produks'));
+}
+
+
 }

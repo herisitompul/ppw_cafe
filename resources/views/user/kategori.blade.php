@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>User Kategori - DelCafe</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+        <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script>
+    </head>
 <body>
         <!-- Header -->
         <header class="header">
             <div class="container d-flex justify-content-between align-items-center">
                 <!-- Logo and Brand Name -->
                 <div class="logo d-flex align-items-center">
-                    <img src="{{ asset('logo/logo.png') }}" alt="delCafe Logo" class="logo-img">
+                    <img src="logo/logo.png" alt="delCafe Logo" class="logo-img">
                 </div>
 
                 <!-- Navigation Menu -->
@@ -63,46 +64,32 @@
 
             <!-- -------- -->
              <div class="image-produk d-flex justify-content-center">
-                <img src="{{asset('kategoris/makanan.png')}}" alt="produk1">
+                <img src="kategori/kategori.png" alt="produk1">
              </div>
              <div class="text-kategory" style="margin-left: 450px;">
                 <h5>Beranda / Makanan</h5>
                 <h3>Makanan</h3>
             </div>
             <section>
-                <div class="d-flex justify-content-center" style="margin-bottom: 10%;">
-                <div class="card" style="width: 15rem; margin-right: 14px;">
-                    <a href="pemesanan.html">
-                    <img src="produk/bakwan.png" class="card-img-top mt-2" alt="..." style="width: 90%; display: block; margin: 0 auto;">
-                </a>
-                    <div class="card-body">
-                      <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">Bakwan saus kacang</p>
-                      <!-- deskripsi -->
-                       <p class="card-text">Wortel, kubis, kacang</p>
-                       <!-- harga -->
-                        <p class="card-text">Rp 15.000</p>
+                <div class="container">
+                    <div class="row">
+                        @foreach ($produks as $produk)
+                        <div class="col-md-4 col-lg-3 mb-4">
+                            <div class="card h-100" style="width: 100%">
+                                <a href="{{ route('user.show', $produk->id) }}">
+                                    <img src="{{ asset('gambar/' . $produk->gambar) }}" class="card-img-top mt-2" alt="..." style="width: 90%; display: block; margin: 0 auto;">
+                                </a>
+                                <div class="card-body">
+                                    <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">{{ $produk->judul }}</p>
+                                    <!-- deskripsi -->
+                                    <p class="card-text">{{ Str::limit($produk->deskripsi, 50) }}</p>
+                                    <!-- harga -->
+                                    <p class="card-text">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
                     </div>
-                  </div>
-                  <div class="card" style="width: 15rem; margin-right: 14px;">
-                    <a href="#">
-                    <img src="produk/bakwan.png" class="card-img-top mt-2" alt="..." style="width: 90%; display: block; margin: 0 auto;">
-                </a>
-                    <div class="card-body">
-                      <p class="card-text">Bakwan saus kacang</p>
-                    </div>
-                  </div>
-                  <div class="card" style="width: 15rem; margin-right: 14px;">
-                    <img src="produk/bakwan.png" class="card-img-top mt-2" alt="..." style="width: 90%; display: block; margin: 0 auto;">
-                    <div class="card-body">
-                      <p class="card-text">Bakwan saus kacang</p>
-                    </div>
-                  </div>
-                  <div class="card" style="width: 15rem; margin-right: 14px;">
-                    <img src="produk/bakwan.png" class="card-img-top mt-2" alt="..." style="width: 90%; display: block; margin: 0 auto;">
-                    <div class="card-body">
-                      <p class="card-text">Bakwan saus kacang</p>
-                    </div>
-                  </div>
                 </div>
             </section>
 
