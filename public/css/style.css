@@ -1,0 +1,105 @@
+body {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f9fa;
+    background: url('../images/bakwan.jpg');
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: 1110px;
+    height: 100vh;
+    width: 100%;
+}
+
+.login-container {
+    /* display: flex; */
+    position: absolute;
+    right: 100px;
+    width: 30%;
+    background-color: white;
+}
+
+.login-text {
+    position: absolute;
+    left: 200px;
+    /* top: 50%; */
+    /* transform: translateY(-50%); */
+    color: rgb(255, 255, 255);
+}
+
+.login-text h1 {
+    font-size: 5rem;
+    margin: 0;
+    font-family: 'Aharoni', sans-serif;
+}
+
+.login-form {
+    flex: 1;
+    padding: 40px;
+}
+
+.login-form h2{
+    font-size: 2rem;
+    margin: 0;
+    font-family: 'Arial Rounded MT Bold', sans-serif;
+    font-weight: bold;
+}
+
+.login-form h3 {
+    font-size: 2rem;
+    font-family: 'Arial Rounded MT Bold', sans-serif;
+    font-weight: bold;
+
+}
+
+.form-control {
+    margin-bottom: 20px;
+}
+
+.btn-login {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+}
+.btn-login:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.login-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+    margin: 0 10px;
+}
+
+.divider span {
+    color: #888;
+    font-size: 14px;
+}
+
+@media screen and (max-width: 476px){
+    .login-container{
+        width: 100%;
+        position: absolute;
+        right: 5px;
+    }
+}
+    
