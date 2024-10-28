@@ -162,4 +162,10 @@ public function dashboard()
     return view('user.dashboard', compact('produks'));
 }
 
+public function ulasan()
+{
+    // $produks = Produk::all(); // Ambil semua produk dari database
+    return view('user.ulasan');
+}
+
 }
