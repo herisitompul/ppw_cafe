@@ -229,3 +229,21 @@
 .card-body {
     /* text-align: center; Menjadikan teks di dalam card berada di tengah */
 }
+
+.product-image {
+    /* max-width: 100%; */
+    width: 500px;
+    height: auto;
+    margin-left: 140px;
+}
+.thumbnail-image {
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
+}
+.product-detail {
+    padding-left: 30px;
+}
+.product-detail p{
+    width: 80%;
+}

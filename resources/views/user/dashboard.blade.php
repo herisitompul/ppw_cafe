@@ -81,24 +81,23 @@
         </a>
     </div>
 
-    <!-- Culinary Section -->
     <section class="culinary-section my-5 text-center">
         <h2 class="mb-4">Aneka kuliner menarik</h2>
         <div class="d-flex justify-content-center">
             <div class="culinary-item mx-3">
-                <a href="#">
+                <a href="{{ route('user.kategori', 1) }}"> <!-- Replace '1' with the correct ID -->
                     <img src="{{ asset('kategoris/makanan.png') }}" class="rounded-circle" alt="Makanan" width="130">
                 </a>
                 <p>Makanan</p>
             </div>
             <div class="culinary-item mx-3">
-                <a href="#">
+                <a href="{{ route('user.kategori', 2) }}"> <!-- Replace '2' with the correct ID -->
                     <img src="{{ asset('kategoris/snack.png') }}" class="rounded-circle" alt="Snack" width="130">
                 </a>
                 <p>Snack</p>
             </div>
             <div class="culinary-item mx-3">
-                <a href="#">
+                <a href="{{ route('user.kategori', 3) }}"> <!-- Replace '3' with the correct ID -->
                     <img src="{{ asset('kategoris/minuman.png') }}" class="rounded-circle" alt="Minuman" width="130">
                 </a>
                 <p>Minuman</p>
@@ -106,30 +105,33 @@
         </div>
     </section>
 
+
     <!-- Product Section -->
-    <h2 class="text-center mb-3">Apa aja nih yang enak di DelCafe?</h2>
-    <section>
-        <div class="container">
-            <div class="row">
-                @foreach ($produks as $produk)
-                <div class="col-md-2 mb-4">
-                    <div class="card h-100" style="width: 100%;">
-                        <div class="container">
-                        <a href="#">
-                            <img src="{{ asset('gambar/' . $produk->gambar) }}" class="card-img-top mt-2" alt="{{ $produk->judul }}" style="height: 130px; object-fit: cover; width: 100%; display: block; margin: 0 auto;">
-                        </a>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">{{ $produk->judul }}</p>
-                            <p class="card-text">{{ $produk->deskripsi }}</p>
-                            <p class="card-text">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
-                        </div>
+<h2 class="text-center mb-3">Apa aja nih yang enak di DelCafe?</h2>
+<section>
+    <div class="container">
+        <div class="row">
+            @foreach ($produks as $produk)
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card h-100" style="width: 100%">
+                    <a href="{{ route('user.show', $produk->id) }}">
+                        <img src="{{ asset('gambar/' . $produk->gambar) }}" class="card-img-top mt-2" alt="..." style="width: 90%; display: block; margin: 0 auto;">
+                    </a>
+                    <div class="card-body">
+                        <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">{{ $produk->judul }}</p>
+                        <!-- deskripsi -->
+                        <p class="card-text">{{ Str::limit($produk->deskripsi, 50) }}</p>
+                        <!-- harga -->
+                        <p class="card-text">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
                     </div>
                 </div>
-                @endforeach
             </div>
+            @endforeach
         </div>
-    </section>
+    </div>
+</section>
+
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -141,7 +143,7 @@
                 <p><i class="fa fa-phone"></i> +628123456789</p>
             </div>
             <div class="footer-right">
-                <img src="{{ asset('logo/icon.png') }}" alt="delCafe Logo" class="footer-logo" style="margin-right: 15px;">
+                <img src="{{ asset('logo/icon 1.png') }}" alt="delCafe Logo" class="footer-logo" style="margin-right: 15px;">
                 <h2>delCafe</h2>
             </div>
         </div>

@@ -21,7 +21,7 @@
                 <th scope="col">Kategori</th>
                 <th scope="col">Stok</th>
                 <th scope="col">Harga</th>
-                <th scope="col">Deskripsi</th>
+                <th scope="col"style="width: 500px">Deskripsi</th>
                 <th scope="col" style="width: 30px">Gambar</th>
                 <th scope="col">Aksi</th>
             </tr>
