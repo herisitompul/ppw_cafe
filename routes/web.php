@@ -48,6 +48,7 @@ Route::get('/kategori/{id}', [KategoriController::class, 'show'])->name('user.ka
 // User category route
 Route::get('/user/kategori/{id}', [ProdukController::class, 'kategoriProduk'])->name('user.kategori');
 
+Route::get('/user/ulasan', [ProdukController::class, 'ulasan'])->name('user.ulasan');
 
 
 
