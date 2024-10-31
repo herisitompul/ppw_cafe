@@ -37,6 +37,7 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
 
 Route::resource('produk', ProdukController::class);
 Route::resource('kategori', KategoriController::class);
+Route::post('/login', [LoginController::class, 'login'])->middleware('remember_me');
 
 // routes/web.php
 Route::get('/user/dashboard', [ProdukController::class, 'dashboard'])->name('user.dashboard');
