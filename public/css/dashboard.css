@@ -247,3 +247,45 @@
 .product-detail p{
     width: 80%;
 }
+
+.whatsapp-link {
+    color: white; /* Warna teks */
+    text-decoration: none; /* Hilangkan garis bawah */
+    transition: color 0.3s ease; /* Animasi perubahan warna */
+}
+
+.whatsapp-link:hover {
+    color: rgb(255, 255, 255); /* Warna saat di-hover */
+    font-weight: bold;
+    text-decoration: underline; /* Menambahkan garis bawah saat di-hover untuk menunjukkan interaksi */
+}
+
+.modal-dialog {
+    position: absolute;
+    right: 0; /* Mengatur agar modal berada di sisi kanan */
+    margin: 0; /* Menghapus margin untuk menyelaraskan dengan tepi */
+    width: 400px; /* Anda dapat menyesuaikan lebar sesuai kebutuhan */
+}
+
+.modal-content {
+    height: 100%; /* Mengatur tinggi konten modal sesuai tinggi modal */
+    border-radius: 0; /* Menghilangkan sudut melengkung */
+}
+
+.modal-header, .modal-footer {
+    flex: 0 0 auto; 
+}
+
+.modal-body {
+    overflow-y: auto; 
+}
+
+.btn-primary {
+    background-color: #4caf50;
+    border-color: #4caf50; 
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+    border-color: #45a049;
+}

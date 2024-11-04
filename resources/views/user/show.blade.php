@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard - DelCafe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script>
  </head>
@@ -52,9 +54,86 @@
                     </div>
 
                     <!-- cart icon -->
-                    <a href="#" class="cart-icon">
-                        <button class="btn" id="cart"><i class="fas fa-shopping-cart" style="font-size: 25px;"></i>(0)</button>
+                    <a href="#" class="cart-icon"data-bs-toggle="modal" data-bs-target="#cartModal">
+                        <button class="btn" id="cart"><i class="fas fa-shopping-cart" style="font-size: 25px;"></i>(<span id="cart-count">0</span>)</button>
                     </a>
+                    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-fullscreen">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="cartModalLabel">Keranjang Anda</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body" id="cart-items">
+                                    <!-- Keranjang Kosong atau Item akan ditampilkan disini -->
+                                </div>
+                                <div class="modal-footer">
+                                    <p id="subtotal-text" class="me-auto">Subtotal: Rp0,00</p>
+                                    <button class="btn btn-primary">Beli Sekarang</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function updateCartCount() {
+                            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+                            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+                            document.getElementById("cart-count").innerText = cartCount;
+                        }
+                
+                        function displayCartItems() {
+                            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+                            const cartItemsContainer = document.getElementById("cart-items");
+                            cartItemsContainer.innerHTML = "";
+                
+                            let subtotal = 0;
+                            cart.forEach(item => {
+                                const itemTotal = item.price * item.quantity;
+                                subtotal += itemTotal;
+                
+                                const itemHTML = `
+                                    <div class="d-flex align-items-center mb-3">
+                                        <img src="/images/${item.name}.png" alt="${item.name}" style="width:50px;" class="me-2">
+                                        <div>
+                                            <p>${item.name}</p>
+                                            <p>Rp${item.price.toLocaleString()}</p>
+                                            <input type="number" class="quantity" value="${item.quantity}" onchange="updateQuantity('${item.id}', this.value)">
+                                        </div>
+                                    </div>
+                                `;
+                                cartItemsContainer.insertAdjacentHTML("beforeend", itemHTML);
+                            });
+                
+                            document.getElementById("subtotal-text").innerText = `Subtotal: Rp${subtotal.toLocaleString()}`;
+                        }
+                
+                        function addToCart() {
+                            const quantity = parseInt(document.getElementById("quantity").value);
+                            const product = {
+                                id: "{{ $produk->id }}",
+                                name: "{{ $produk->judul }}",
+                                price: {{ $produk->harga }},
+                                quantity: quantity
+                            };
+                
+                            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+                            const existingProduct = cart.find(item => item.id === product.id);
+                            if (existingProduct) {
+                                existingProduct.quantity += quantity;
+                            } else {
+                                cart.push(product);
+                            }
+                
+                            localStorage.setItem("cart", JSON.stringify(cart));
+                            updateCartCount();
+                            displayCartItems();
+                        }
+                
+                        document.addEventListener("DOMContentLoaded", function() {
+                            updateCartCount();
+                            displayCartItems();
+                        });
+                    </script>
 
                     <!-- user dropdown -->
                     <div class="dropdown">
@@ -98,14 +177,83 @@
                             <p>{{ $produk->deskripsi }}</p>
                             <p><strong>Kuantitas:</strong></p>
                             <div class="d-flex align-items-center mb-3">
-                                <button class="btn btn-outline-secondary">-</button>
-                                <input type="text" class="form-control text-center mx-2" value="1" style="width: 50px;">
-                                <button class="btn btn-outline-secondary">+</button>
+                                <button class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
+                                <input type="text" id="quantity" class="form-control text-center mx-2" value="1" style="width: 50px;">
+                                <button class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
                             </div>
+                            <script>
+                                // Fungsi untuk menambah kuantitas
+                                function increaseQuantity() {
+                                    const quantityInput = document.getElementById("quantity");
+                                    let quantity = parseInt(quantityInput.value);
+                                    quantity += 1;
+                                    quantityInput.value = quantity;
+                                }
+                            
+                                // Fungsi untuk mengurangi kuantitas
+                                function decreaseQuantity() {
+                                    const quantityInput = document.getElementById("quantity");
+                                    let quantity = parseInt(quantityInput.value);
+                                    if (quantity > 1) {
+                                        quantity -= 1;
+                                    }
+                                    quantityInput.value = quantity;
+                                }
+                            </script>
                             <p><strong>Stok: {{ $produk->stok }}</strong></p>
                             <div class="d-flex mb-3">
-                                <button class="btn btn-secondary mr-2">Masukkan Keranjang</button>
-                                <button class="btn btn-success mx-2">Beli Sekarang</button>
+<!-- Tambahkan ID pada tombol "Masukkan Keranjang" -->
+<div class="d-flex mb-3">
+    <button class="btn btn-secondary mr-2" onclick="addToCart()">Masukkan Keranjang</button>
+    <button class="btn btn-success mx-2">Beli Sekarang</button>
+</div>
+
+
+<script>
+    // Fungsi untuk mendapatkan jumlah item di keranjang
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+        const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+        document.getElementById("cart-count").innerText = cartCount;
+    }
+
+    // Fungsi untuk menambah produk ke keranjang
+    function addToCart() {
+        const quantityInput = document.getElementById("quantity");
+        const quantity = parseInt(quantityInput.value);
+        
+        // Contoh data produk yang ditambahkan
+        const product = {
+            id: "{{ $produk->id }}", // ID produk
+            name: "{{ $produk->judul }}", // Nama produk
+            price: {{ $produk->harga }}, // Harga produk
+            quantity: quantity
+        };
+
+        // Ambil keranjang dari localStorage atau buat keranjang baru
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+        // Periksa apakah produk sudah ada di keranjang
+        const existingProduct = cart.find(item => item.id === product.id);
+        if (existingProduct) {
+            existingProduct.quantity += quantity; // Jika sudah ada, tambahkan kuantitas
+        } else {
+            cart.push(product); // Jika belum ada, tambahkan produk ke keranjang
+        }
+
+        // Simpan kembali ke localStorage
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // Perbarui jumlah produk di ikon keranjang
+        updateCartCount();
+
+    }
+
+    // Panggil updateCartCount() saat halaman dimuat untuk menampilkan jumlah item di keranjang
+    document.addEventListener("DOMContentLoaded", updateCartCount);
+</script>
+
+                                {{-- <button class="btn btn-success mx-2">Beli Sekarang</button> --}}
                             </div>
                             <p>Kategori: {{ $produk->kategori->nama }}</p>
                         </div>
