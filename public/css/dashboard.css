@@ -177,12 +177,6 @@
     align-items: center;
 }
 
-.container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 80%;
-}
 
 .footer-left {
     flex: 1;
@@ -289,3 +283,15 @@
     background-color: #45a049;
     border-color: #45a049;
 }
+
+.product-detail {
+    padding-left: 30px;
+}
+.product-detail p{
+    width: 80%;
+}
+
+.btn-danger .trash-alt {
+    color: white;
+}
+

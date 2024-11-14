@@ -34,10 +34,10 @@
                 </div>
 
                 <!-- cart icon -->
-                <a href="#" class="cart-icon"data-bs-toggle="modal" data-bs-target="#cartModal">
-                    <button class="btn" id="cart"><i class="fas fa-shopping-cart" style="font-size: 25px;"></i>(0)
-                    </button>
+                <a href="#" class="cart-icon" data-bs-toggle="modal" data-bs-target="#cartModal">
+                    <button class="btn" id="cart"><i class="fas fa-shopping-cart" style="font-size: 25px;"></i>(<span id="cart-count">0</span>)</button>
                 </a>
+
                 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-fullscreen">
                         <div class="modal-content">
@@ -45,24 +45,12 @@
                                 <h5 class="modal-title" id="cartModalLabel">Keranjang Anda</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                                <!-- Cart Items -->
-                                <div class="cart-item d-flex align-items-center mb-3">
-                                    <input type="checkbox" class="product-select" data-price="13000">
-                                    <img src="{{ asset ('images/pisangcoklat.png')}}" alt="Pisang Coklat Lumer" class="image-product mx-2" style="width: 50px;">
-                                    <div>
-                                        <p>Pisang Coklat Lumer</p>
-                                        <p>Rp13.000,00</p>
-                                        <input type="number" class="quantity" min="1" value="1" style="width: 50px;">
-                                    </div>
-                                </div>
-                                <!-- Add more cart items similarly -->
-                                <div class="subtotal">
-                                    <p>Subtotal: Rp56.000,00</p>
-                                </div>
+                            <div class="modal-body" id="cart-items">
+                                <!-- Cart Items will be rendered here -->
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-primary">Beli sekarang</button>
+                                <p id="subtotal-text" class="me-auto">Subtotal: Rp0,00</p>
+                                <button class="btn btn-primary">Beli Sekarang</button>
                             </div>
                         </div>
                     </div>
@@ -188,5 +176,151 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+
+        // Fungsi untuk menambahkan item ke keranjang
+function addToCart(product) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const existingProductIndex = cart.findIndex(item => item.id === product.id);
+
+    // Jika item sudah ada di keranjang, update jumlahnya
+    if (existingProductIndex > -1) {
+        cart[existingProductIndex].quantity += product.quantity;
+    } else {
+        // Jika item baru, tambahkan ke keranjang
+        cart.push(product);
+    }
+
+    // Simpan keranjang ke localStorage
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Update jumlah item di cart icon (agar langsung terlihat)
+    updateCartCount();
+}
+
+// Fungsi untuk memperbarui jumlah item di ikon cart
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+    // Menampilkan jumlah item di ikon cart
+    const cartIcon = document.getElementById("cart-count");
+    if (cartIcon) {
+        cartIcon.innerText = totalQuantity;
+    }
+}
+
+// Fungsi untuk menghapus item dari keranjang
+function removeFromCart(index) {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.splice(index, 1);
+    localStorage.setItem("cart", JSON.stringify(cart));
+    
+    // Perbarui jumlah item di cart
+    updateCartCount();
+
+    // Render ulang item di keranjang
+    renderCartItems();
+    calculateSubtotal();
+}
+
+// Pastikan jumlah item di ikon cart diperbarui saat halaman dimuat
+document.addEventListener("DOMContentLoaded", function() {
+    updateCartCount(); // Perbarui jumlah item di ikon cart ketika halaman dimuat
+});
+
+        // Fungsi untuk merender isi keranjang
+        function renderCartItems() {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const cartItemsContainer = document.getElementById("cart-items");
+            cartItemsContainer.innerHTML = "";
+    
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = "<p>Keranjang Anda kosong.</p>";
+                document.getElementById("subtotal-text").innerText = "Subtotal: Rp0,00";
+                return;
+            }
+    
+            let subtotal = 0;
+            cart.forEach((item, index) => {
+                const itemTotalPrice = item.price * item.quantity;
+                subtotal += itemTotalPrice;
+    
+                cartItemsContainer.innerHTML += `
+                    <div class="cart-item d-flex justify-content-between align-items-center mb-2">
+                        <input type="checkbox" class="item-checkbox" data-index="${index}" onchange="calculateSubtotal()">
+                        <div class="d-flex align-items-center">
+                            <img src="${item.image}" alt="${item.name}" class="cart-item-image" style="width: 50px; height: 50px; margin-right: 10px;">
+                            <div>
+                                <strong>${item.name}</strong><br>
+                                <small>Harga: Rp${item.price.toLocaleString()}</small><br>
+                                <div class="d-flex align-items-center">
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="changeQuantity(${index}, -1)">-</button>
+                                    <input type="text" class="form-control text-center mx-2" id="quantity-${index}" value="${item.quantity}" style="width: 50px;" readonly>
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="changeQuantity(${index}, 1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span id="item-total-${index}" class="me-3">Rp${itemTotalPrice.toLocaleString()}</span>
+                            <button class="btn btn-sm p-0" onclick="removeFromCart(${index})">
+                                <i class="fas fa-trash-alt" style="color: black;"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+    
+            document.getElementById("subtotal-text").innerText = `Subtotal: Rp${subtotal.toLocaleString()}`;
+        }
+    
+        // Fungsi untuk menghitung subtotal berdasarkan item yang dipilih
+        function calculateSubtotal() {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let subtotal = 0;
+            document.querySelectorAll(".item-checkbox").forEach((checkbox) => {
+                if (checkbox.checked) {
+                    const index = parseInt(checkbox.getAttribute("data-index"));
+                    const item = cart[index];
+                    subtotal += item.price * item.quantity;
+                }
+            });
+    
+            document.getElementById("subtotal-text").innerText = `Subtotal: Rp${subtotal.toLocaleString()}`;
+        }
+    
+        // Fungsi untuk mengubah jumlah item di keranjang
+        function changeQuantity(index, change) {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const item = cart[index];
+    
+            item.quantity += change;
+            if (item.quantity < 1) {
+                item.quantity = 1;
+            }
+    
+            document.getElementById(`quantity-${index}`).value = item.quantity;
+            document.getElementById(`item-total-${index}`).innerText = `Rp${(item.price * item.quantity).toLocaleString()}`;
+    
+            localStorage.setItem("cart", JSON.stringify(cart));
+            calculateSubtotal();
+        }
+    
+        // Fungsi untuk menghapus item dari keranjang
+        function removeFromCart(index) {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            renderCartItems();
+            calculateSubtotal();
+        }
+    
+        // Inisialisasi saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function() {
+            renderCartItems();
+        });
+    </script>
+
 </body>
 </html>
