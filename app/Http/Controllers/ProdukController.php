@@ -190,5 +190,17 @@ public function kategoriProduk($id)
     return view('user.kategori', compact('kategori', 'produks'));
 }
 
+public function search(Request $request)
+{
+    // Ambil kata kunci pencarian dari input pengguna
+    $keyword = $request->input('search');
+
+    // Cari produk berdasarkan judul
+    $produks = Produk::where('judul', 'like', '%' . $keyword . '%')->get();
+    $kategori = Kategori::where('nama', 'like', '%' . $keyword . '%')->get();
+
+    // Kembalikan view dengan hasil pencarian
+    return view('user.dashboard', compact('produks', 'kategori'));
+}
 
 }

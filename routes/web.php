@@ -50,7 +50,7 @@ Route::get('/user/kategori/{id}', [ProdukController::class, 'kategoriProduk'])->
 
 Route::get('/user/ulasan', [ProdukController::class, 'ulasan'])->name('user.ulasan');
 
-
+Route::get('/search', [ProdukController::class, 'search'])->name('product.search');
 
 
 Auth::routes();

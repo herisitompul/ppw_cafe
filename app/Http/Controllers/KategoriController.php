@@ -18,14 +18,36 @@ class KategoriController extends Controller
         return view('kategori.create');
     }
 
-    public function store(Request $request){
-        $request->validate([
-            'nama' => 'required'
-        ]);
+    // public function store(Request $request){
+    //     $request->validate([
+    //         'nama' => 'required'
 
-        Kategori::create($request->all());
-        return redirect()->route('kategori.index')->with('success', 'Kategori berhasil ditambahkan');
+    //     ]);
+
+    //     Kategori::create($request->all());
+    //     return redirect()->route('kategori.index')->with('success', 'Kategori berhasil ditambahkan');
+    // }
+
+    public function store(Request $request)
+{
+    $request->validate([
+        'nama' => 'required',
+        'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Validate image
+    ]);
+
+    $data = $request->only('nama');
+
+    if ($request->hasFile('gambar')) {
+        $image = $request->file('gambar');
+        $imageName = time() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('kategoris'), $imageName);
+        $data['gambar'] = $imageName;
     }
+
+    Kategori::create($data);
+
+    return redirect()->route('kategori.index')->with('success', 'Kategori berhasil ditambahkan');
+}
 
     public function show($id)
     {
@@ -46,14 +68,41 @@ class KategoriController extends Controller
         return view('kategori.edit', compact('kategori'));
     }
 
+    // public function update(Request $request, Kategori $kategori)
+    // {
+    //     $request->validate(['nama' => 'required']);
+    //     // $kategori = Kategori::findOrFail($id);
+    //     // $kategori->update($request->all());
+    //     $kategori->update(['nama' => $request->nama]);
+    //     return redirect()->route('kategori.index')->with('success', 'Kategori updated successfully.');
+    // }
+
     public function update(Request $request, Kategori $kategori)
-    {
-        $request->validate(['nama' => 'required']);
-        // $kategori = Kategori::findOrFail($id);
-        // $kategori->update($request->all());
-        $kategori->update(['nama' => $request->nama]);
-        return redirect()->route('kategori.index')->with('success', 'Kategori updated successfully.');
+{
+    $request->validate([
+        'nama' => 'required',
+        'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+    ]);
+
+    $data = $request->only('nama');
+
+    if ($request->hasFile('gambar')) {
+        $image = $request->file('gambar');
+        $imageName = time() . '_' . $image->getClientOriginalName();
+        $image->move(public_path('kategoris'), $imageName);
+        $data['gambar'] = $imageName;
+
+        // Optionally, delete the old image
+        if ($kategori->gambar) {
+            unlink(public_path('kategoris/' . $kategori->gambar));
+        }
     }
+
+    $kategori->update($data);
+
+    return redirect()->route('kategori.index')->with('success', 'Kategori updated successfully.');
+}
+
 
     public function destroy(Request $request, Kategori $kategori)
     {

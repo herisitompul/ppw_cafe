@@ -19,7 +19,7 @@
             </div>
 
             <nav class="nav">
-                <a href="dashboard.html" class="nav-link">Beranda</a>
+                <a href="{{ route('user.dashboard') }}" class="nav-link">Beranda</a>
                 <a href="#" class="nav-link">Pesanan saya</a>
             </nav>
 
@@ -72,15 +72,15 @@
     </header>
 
     <!-- Product Section -->
-    <div class="container mt-5">
+    <div class="container mt-5 mb-5">
         <div class="row">
             <div class="col-md-6">
                 <img src="{{ asset('gambar/' . $produk->gambar) }}" alt="Bakwan Saus Kacang" class="product-image" style="border-radius: 10px">
-                <div class="d-flex mt-3" style="margin-left: 145px;">
+                {{-- <div class="d-flex mt-3" style="margin-left: 145px;">
                     <img src="{{ asset('gambar/' . $produk->gambar) }}" alt="Thumbnail 1" class="thumbnail-image">
                     <img src="produk/bakwan.png" alt="Thumbnail 2" class="thumbnail-image">
                     <img src="produk/bakwan.png" alt="Thumbnail 3" class="thumbnail-image">
-                </div>
+                </div> --}}
             </div>
             <div class="col-md-6 product-detail">
                 <h3>{{ $produk->judul }}</h3>
@@ -100,7 +100,55 @@
                 <p>Kategori: {{ $produk->kategori->nama }}</p>
             </div>
         </div>
-    </div>
+    </div><br>
+
+    <h2 class="text-center mb-3">Kamu mungkin juga suka</h2>
+    <section>
+        <div class="container">
+            <div class="row">
+                @foreach ($produks as $produk)
+                <div class="col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100" style="width: 100%">
+                        <a href="{{ route('user.show', $produk->id) }}">
+                            <img src="{{ asset('gambar/' . $produk->gambar) }}" class="card-img-top mt-2" alt="..." style="width: 90%; display: block; margin: 0 auto;">
+                        </a>
+                        <div class="card-body">
+                            <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">{{ $produk->judul }}</p>
+                            <p class="card-text">{{ Str::limit($produk->deskripsi, 50) }}</p>
+                            <p class="card-text">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-left">
+                <h3>Contact Us</h3>
+                <p>Find your food here</p>
+                <p><i class="fa fa-envelope"></i> delcafe@gmail.com</p>
+                <p>
+                    {{-- <i class="fa fa-phone"></i>  --}}
+                    <a href="https://wa.me/6287844043032" target="_blank" class="whatsapp-link">
+                        <i class="fab fa-whatsapp"></i> +628123456789
+                    </a>
+                </p>
+            </div>
+            <div class="footer-right">
+                <img src="{{ asset('logo/icon 1.png') }}" alt="delCafe Logo" class="footer-logo"
+                    style="margin-right: 15px;">
+                <h2>delCafe</h2>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <script>
         // Fungsi untuk menambahkan item ke keranjang

@@ -21,14 +21,6 @@
                 <label for="stok">Stok</label>
                 <input type="number" class="form-control" id="stok" name="stok" required>
             </div>
-            {{-- <div class="form-group">
-                <label for="kategori_id">Kategori:</label>
-                <select class="form-control" id="kategori_id" name="kategori_id" required>
-                    @foreach($kategori as $kategori)
-                        <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
-                    @endforeach
-                </select>
-            </div> --}}
             <div class="form-group">
                 <label for="price">Harga</label>
                 <input type="number" class="form-control" id="harga" name="harga" required>

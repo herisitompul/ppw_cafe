@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script>
 </head>
+
 <body>
     <!-- Header -->
     <header class="header">
@@ -21,7 +23,7 @@
 
             <!-- Navigation Menu -->
             <nav class="nav">
-                <a href="#" class="nav-link">Beranda</a>
+                <a href="{{ route('user.dashboard') }}" class="nav-link">Beranda</a>
                 <a href="#" class="nav-link">Pesanan saya</a>
             </nav>
 
@@ -29,21 +31,30 @@
             <div class="icons d-flex align-items-center">
                 <!-- Search Bar -->
                 <div class="search-box">
-                    <input type="text" placeholder="Search...">
-                    <button type="submit"><i class="fas fa-search"></i></button>
+                    <form action="{{ route('product.search') }}" method="GET">
+                        <div class="search-container">
+                            <input type="text" name="search" placeholder="Cari produk..." required>
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
                 </div>
+
+
 
                 <!-- cart icon -->
                 <a href="#" class="cart-icon" data-bs-toggle="modal" data-bs-target="#cartModal">
-                    <button class="btn" id="cart"><i class="fas fa-shopping-cart" style="font-size: 25px;"></i>(<span id="cart-count">0</span>)</button>
+                    <button class="btn" id="cart"><i class="fas fa-shopping-cart"
+                            style="font-size: 25px;"></i>(<span id="cart-count">0</span>)</button>
                 </a>
 
-                <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+                <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-fullscreen">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="cartModalLabel">Keranjang Anda</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body" id="cart-items">
                                 <!-- Cart Items will be rendered here -->
@@ -58,7 +69,8 @@
 
                 <!-- user dropdown -->
                 <div class="dropdown">
-                    <button class="user-icon dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="user-icon dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         <span class="user-initial">{{ strtoupper(auth()->user()->name[0]) }}</span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
@@ -66,7 +78,8 @@
                             <strong>{{ auth()->user()->name }}</strong><br>
                             <small>{{ auth()->user()->email }}</small><br>
                         </div>
-                        <a class="dropdown-item" href="#">Pesanan saya</a><hr>
+                        <a class="dropdown-item" href="#">Pesanan saya</a>
+                        <hr>
                         <!-- logout -->
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
@@ -101,55 +114,52 @@
         </a>
     </div>
 
+    <!-- Culinary Section -->
     <section class="culinary-section my-5 text-center">
         <h2 class="mb-4">Aneka kuliner menarik</h2>
-        <div class="d-flex justify-content-center">
-            <div class="culinary-item mx-3">
-                <a href="{{ route('user.kategori', 1) }}"> <!-- Replace '1' with the correct ID -->
-                    <img src="{{ asset('kategoris/makanan.png') }}" class="rounded-circle" alt="Makanan" width="130">
-                </a>
-                <p>Makanan</p>
-            </div>
-            <div class="culinary-item mx-3">
-                <a href="{{ route('user.kategori', 2) }}"> <!-- Replace '2' with the correct ID -->
-                    <img src="{{ asset('kategoris/snack.png') }}" class="rounded-circle" alt="Snack" width="130">
-                </a>
-                <p>Snack</p>
-            </div>
-            <div class="culinary-item mx-3">
-                <a href="{{ route('user.kategori', 3) }}"> <!-- Replace '3' with the correct ID -->
-                    <img src="{{ asset('kategoris/minuman.png') }}" class="rounded-circle" alt="Minuman" width="130">
-                </a>
-                <p>Minuman</p>
-            </div>
+        <div class="d-flex justify-content-center gap-5 flex-wrap">
+            @foreach ($kategori as $kategori)
+                <div class="culinary-item text-center">
+                    <a href="{{ route('user.kategori', $kategori->id) }}">
+                        <div class="image-container">
+                            <img src="{{ asset('kategoris/' . $kategori->gambar) }}" class="rounded-circle"
+                                alt="{{ $kategori->nama }}">
+                        </div>
+                    </a>
+                    <p>{{ $kategori->nama }}</p>
+                </div>
+            @endforeach
         </div>
     </section>
 
 
+
     <!-- Product Section -->
-<h2 class="text-center mb-3">Apa aja nih yang enak di DelCafe?</h2>
-<section>
-    <div class="container">
-        <div class="row">
-            @foreach ($produks as $produk)
-            <div class="col-md-4 col-lg-3 mb-4">
-                <div class="card h-100" style="width: 100%">
-                    <a href="{{ route('user.show', $produk->id) }}">
-                        <img src="{{ asset('gambar/' . $produk->gambar) }}" class="card-img-top mt-2" alt="..." style="width: 90%; display: block; margin: 0 auto;">
-                    </a>
-                    <div class="card-body">
-                        <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">{{ $produk->judul }}</p>
-                        <!-- deskripsi -->
-                        <p class="card-text">{{ Str::limit($produk->deskripsi, 50) }}</p>
-                        <!-- harga -->
-                        <p class="card-text">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
+    <h2 class="text-center mb-3">Apa aja nih yang enak di DelCafe?</h2>
+    <section>
+        <div class="container">
+            <div class="row">
+                @foreach ($produks as $produk)
+                    <div class="col-md-4 col-lg-3 mb-4">
+                        <div class="card h-100" style="width: 100%">
+                            <a href="{{ route('user.show', $produk->id) }}">
+                                <img src="{{ asset('gambar/' . $produk->gambar) }}" class="card-img-top mt-2"
+                                    alt="..." style="width: 90%; display: block; margin: 0 auto;">
+                            </a>
+                            <div class="card-body">
+                                <p class="card-text" style="font-weight: bold; font-size: 20px; margin-bottom: 3px;">
+                                    {{ $produk->judul }}</p>
+                                <!-- deskripsi -->
+                                <p class="card-text">{{ Str::limit($produk->deskripsi, 50) }}</p>
+                                <!-- harga -->
+                                <p class="card-text-price">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
-    </div>
-</section>
+    </section>
 
 
 
@@ -168,7 +178,8 @@
                 </p>
             </div>
             <div class="footer-right">
-                <img src="{{ asset('logo/icon 1.png') }}" alt="delCafe Logo" class="footer-logo" style="margin-right: 15px;">
+                <img src="{{ asset('logo/icon 1.png') }}" alt="delCafe Logo" class="footer-logo"
+                    style="margin-right: 15px;">
                 <h2>delCafe</h2>
             </div>
         </div>
@@ -178,75 +189,74 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-
         // Fungsi untuk menambahkan item ke keranjang
-function addToCart(product) {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const existingProductIndex = cart.findIndex(item => item.id === product.id);
+        function addToCart(product) {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const existingProductIndex = cart.findIndex(item => item.id === product.id);
 
-    // Jika item sudah ada di keranjang, update jumlahnya
-    if (existingProductIndex > -1) {
-        cart[existingProductIndex].quantity += product.quantity;
-    } else {
-        // Jika item baru, tambahkan ke keranjang
-        cart.push(product);
-    }
+            // Jika item sudah ada di keranjang, update jumlahnya
+            if (existingProductIndex > -1) {
+                cart[existingProductIndex].quantity += product.quantity;
+            } else {
+                // Jika item baru, tambahkan ke keranjang
+                cart.push(product);
+            }
 
-    // Simpan keranjang ke localStorage
-    localStorage.setItem("cart", JSON.stringify(cart));
+            // Simpan keranjang ke localStorage
+            localStorage.setItem("cart", JSON.stringify(cart));
 
-    // Update jumlah item di cart icon (agar langsung terlihat)
-    updateCartCount();
-}
+            // Update jumlah item di cart icon (agar langsung terlihat)
+            updateCartCount();
+        }
 
-// Fungsi untuk memperbarui jumlah item di ikon cart
-function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+        // Fungsi untuk memperbarui jumlah item di ikon cart
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-    // Menampilkan jumlah item di ikon cart
-    const cartIcon = document.getElementById("cart-count");
-    if (cartIcon) {
-        cartIcon.innerText = totalQuantity;
-    }
-}
+            // Menampilkan jumlah item di ikon cart
+            const cartIcon = document.getElementById("cart-count");
+            if (cartIcon) {
+                cartIcon.innerText = totalQuantity;
+            }
+        }
 
-// Fungsi untuk menghapus item dari keranjang
-function removeFromCart(index) {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
-    
-    // Perbarui jumlah item di cart
-    updateCartCount();
+        // Fungsi untuk menghapus item dari keranjang
+        function removeFromCart(index) {
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
 
-    // Render ulang item di keranjang
-    renderCartItems();
-    calculateSubtotal();
-}
+            // Perbarui jumlah item di cart
+            updateCartCount();
 
-// Pastikan jumlah item di ikon cart diperbarui saat halaman dimuat
-document.addEventListener("DOMContentLoaded", function() {
-    updateCartCount(); // Perbarui jumlah item di ikon cart ketika halaman dimuat
-});
+            // Render ulang item di keranjang
+            renderCartItems();
+            calculateSubtotal();
+        }
+
+        // Pastikan jumlah item di ikon cart diperbarui saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", function() {
+            updateCartCount(); // Perbarui jumlah item di ikon cart ketika halaman dimuat
+        });
 
         // Fungsi untuk merender isi keranjang
         function renderCartItems() {
             const cart = JSON.parse(localStorage.getItem("cart")) || [];
             const cartItemsContainer = document.getElementById("cart-items");
             cartItemsContainer.innerHTML = "";
-    
+
             if (cart.length === 0) {
                 cartItemsContainer.innerHTML = "<p>Keranjang Anda kosong.</p>";
                 document.getElementById("subtotal-text").innerText = "Subtotal: Rp0,00";
                 return;
             }
-    
+
             let subtotal = 0;
             cart.forEach((item, index) => {
                 const itemTotalPrice = item.price * item.quantity;
                 subtotal += itemTotalPrice;
-    
+
                 cartItemsContainer.innerHTML += `
                     <div class="cart-item d-flex justify-content-between align-items-center mb-2">
                         <input type="checkbox" class="item-checkbox" data-index="${index}" onchange="calculateSubtotal()">
@@ -271,10 +281,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     </div>
                 `;
             });
-    
+
             document.getElementById("subtotal-text").innerText = `Subtotal: Rp${subtotal.toLocaleString()}`;
         }
-    
+
         // Fungsi untuk menghitung subtotal berdasarkan item yang dipilih
         function calculateSubtotal() {
             const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -286,27 +296,27 @@ document.addEventListener("DOMContentLoaded", function() {
                     subtotal += item.price * item.quantity;
                 }
             });
-    
+
             document.getElementById("subtotal-text").innerText = `Subtotal: Rp${subtotal.toLocaleString()}`;
         }
-    
+
         // Fungsi untuk mengubah jumlah item di keranjang
         function changeQuantity(index, change) {
             const cart = JSON.parse(localStorage.getItem("cart")) || [];
             const item = cart[index];
-    
+
             item.quantity += change;
             if (item.quantity < 1) {
                 item.quantity = 1;
             }
-    
+
             document.getElementById(`quantity-${index}`).value = item.quantity;
             document.getElementById(`item-total-${index}`).innerText = `Rp${(item.price * item.quantity).toLocaleString()}`;
-    
+
             localStorage.setItem("cart", JSON.stringify(cart));
             calculateSubtotal();
         }
-    
+
         // Fungsi untuk menghapus item dari keranjang
         function removeFromCart(index) {
             const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -315,7 +325,7 @@ document.addEventListener("DOMContentLoaded", function() {
             renderCartItems();
             calculateSubtotal();
         }
-    
+
         // Inisialisasi saat halaman dimuat
         document.addEventListener("DOMContentLoaded", function() {
             renderCartItems();
@@ -323,4 +333,5 @@ document.addEventListener("DOMContentLoaded", function() {
     </script>
 
 </body>
+
 </html>
