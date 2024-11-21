@@ -95,6 +95,8 @@
                 {{-- <input type="text" id="name" name="name" class="form-control" placeholder="Your username" required> --}}
                 <input type="email" name="email" class="form-control" placeholder="Your Email" required>
                 <input type="password" id="password" name="password" class="form-control" placeholder="Your password" required>
+                <input type="checkbox">
+                <label for="Remember">Remember me</label>
                 <button type="submit" class="btn btn-login">Log In</button>
             </form>
             <div class="divider">

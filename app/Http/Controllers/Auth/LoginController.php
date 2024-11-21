@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -37,6 +39,24 @@ class LoginController extends Controller
     //     $this->middleware('guest')->except('logout');
     //     $this->middleware('auth')->only('logout');
     // }
+    
+    public function login(Request $request)
+    {
+        $this->validateLogin($request);
+
+        if ($this->attemptLogin($request)) {
+            if ($request->has('remember')) {
+                Cookie::queue('remember_me', 'true', 60 * 24 * 30); // 30 days
+            } else {
+                Cookie::queue(Cookie::forget('remember_me'));
+            }
+
+            return $this->sendLoginResponse($request);
+        }
+
+        return $this->sendFailedLoginResponse($request);
+    }
 }
+
 
 

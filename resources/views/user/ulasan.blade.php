@@ -9,25 +9,25 @@
 </head>
 <body>
 
-   
+
     <div class="header">
         <div class="left-section">
             <div class="logo">
-                <img src="Image/logo.png" alt="Logo delCafe"> 
+                <img src="Image/logo.png" alt="Logo delCafe">
             </div>
             <div class="menu">
-                <a href="#">Beranda</a>
+                <a href="{{ route('user.dashboard') }}" class="nav-link">Beranda</a>
                 <a href="#">Pesanan saya</a>
             </div>
             <!-- Search Box -->
             <div class="search-box">
                 <input type="text" placeholder="Cari menu...">
-                <i class="fa fa-search icon" aria-hidden="true"></i> 
+                <i class="fa fa-search icon" aria-hidden="true"></i>
             </div>
         </div>
         <div class="right-section">
             <i class="fa fa-shopping-basket icon" aria-hidden="true"></i>
-            <i class="fa fa-user icon" aria-hidden="true"></i> 
+            <i class="fa fa-user icon" aria-hidden="true"></i>
         </div>
     </div>
 
