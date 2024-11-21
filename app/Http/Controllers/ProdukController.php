@@ -170,7 +170,6 @@ public function ulasan()
     return view('user.ulasan');
 }
 
-=======
 public function show($id)
 {
     $produk = Produk::with('kategori')->findOrFail($id);
@@ -191,5 +190,4 @@ public function kategoriProduk($id)
 }
 
 
->>>>>>> c40901304d207f3acd2a4a378c717e7b0255ec88
 }
