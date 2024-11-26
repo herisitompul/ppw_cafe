@@ -169,8 +169,6 @@ public function ulasan()
     // $produks = Produk::all(); // Ambil semua produk dari database
     return view('user.ulasan');
 }
-
-
 public function show($id)
 {
     $produk = Produk::with('kategori')->findOrFail($id);
