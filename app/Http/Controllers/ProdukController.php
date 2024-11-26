@@ -200,7 +200,7 @@ public function search(Request $request)
     $kategori = Kategori::where('nama', 'like', '%' . $keyword . '%')->get();
 
     // Kembalikan view dengan hasil pencarian
-    return view('user.dashboard', compact('produks', 'kategori'));
+    return view('user.dashboard1', compact('produks', 'kategori'));
 }
 
 }

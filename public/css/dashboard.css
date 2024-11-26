@@ -49,15 +49,16 @@
     align-items: center;
     border: 2px solid #d3d3d3;
     border-radius: 10px;
-    padding: 3px;
+    padding: 3px 10px;
     width: 700px;
+    max-width: 700px;
     background-color: #f5f5f5;
 }
 
 .search-box input {
     border: none;
     outline: none;
-    width: 700px;
+    flex-grow: 1; /* Membuat input memanjang */
     padding: 5px;
     background-color: transparent;
     font-size: 16px;
@@ -68,13 +69,16 @@
     border: none;
     cursor: pointer;
     padding: 5px;
-    margin-left: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .search-box button i {
     font-size: 18px;
     color: #333;
 }
+
 
 /* Icons styling */
 .cart-icon {

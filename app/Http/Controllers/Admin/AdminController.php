@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -35,5 +36,12 @@ class AdminController extends Controller
         Auth::guard('admin')->logout();
         return redirect()->route('admin.login');
     }
+
+    public function orders()
+{
+    $orders = Order::with('user', 'produk')->get();
+    return view('Admin.orders', compact('orders'));
+}
+
 
 }

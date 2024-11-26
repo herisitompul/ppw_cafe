@@ -111,7 +111,7 @@
         </a>
     </div>
 
-    <!-- Culinary Section -->
+    {{-- <!-- Culinary Section -->
     <section class="culinary-section my-5 text-center">
         <h2 class="mb-4">Aneka kuliner menarik</h2>
         <div class="d-flex justify-content-center gap-5 flex-wrap">
@@ -127,7 +127,7 @@
                 </div>
             @endforeach
         </div>
-    </section>
+    </section> --}}
 
 
 
