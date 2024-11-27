@@ -1,56 +1,52 @@
 body {
     display: flex;
-    justify-content: right;
+    justify-content: center;
     align-items: center;
     height: 100vh;
     background-color: #f8f9fa;
-    background: url('../images/bakwan.jpg');
-    background-position: left;
-    background-repeat: no-repeat;
-    background-size: 1110px;
-    height: 100vh;
-    width: 100%;
+    background: url('../images/bakwan.jpg') no-repeat left center;
+    background-size: cover;
 }
 
 .login-container {
-    /* display: flex; */
-    position: absolute;
-    right: 100px;
-    width: 30%;
+    width: 100%;
+    max-width: 400px; /* Set a max width for larger screens */
     background-color: white;
+    border-radius: 10px; /* Optional: Add some border radius */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for depth */
 }
 
 .login-text {
-    position: absolute;
-    left: 200px;
-    /* top: 50%; */
-    /* transform: translateY(-50%); */
     color: rgb(255, 255, 255);
+    text-align: center;
+    margin-bottom: 30px; /* Space between title and form */
 }
 
 .login-text h1 {
-    font-size: 5rem;
+    font-size: 4rem; /* Responsive font size */
     margin: 0;
     font-family: 'Aharoni', sans-serif;
 }
 
 .login-form {
-    flex: 1;
     padding: 40px;
 }
 
-.login-form h2{
+.login-form h2 {
     font-size: 2rem;
     margin: 0;
     font-family: 'Arial Rounded MT Bold', sans-serif;
     font-weight: bold;
+    justify-content: center;
+    text-align: center;
 }
 
 .login-form h3 {
-    font-size: 2rem;
+    font-size: 1.5rem; /* Slightly smaller for better responsiveness */
     font-family: 'Arial Rounded MT Bold', sans-serif;
     font-weight: bold;
-
+    justify-content: center;
+    text-align: center;
 }
 
 .form-control {
@@ -65,6 +61,7 @@ body {
     border-radius: 5px;
     width: 100%;
 }
+
 .btn-login:hover {
     background-color: #218838;
     border-color: #1e7e34;
@@ -92,14 +89,6 @@ body {
 
 .divider span {
     color: #888;
-    font-size: 14px;
+    font-size: 1rem; /* Add a value for font-size */
 }
 
-@media screen and (max-width: 476px){
-    .login-container{
-        width: 100%;
-        position: absolute;
-        right: 5px;
-    }
-}
-    

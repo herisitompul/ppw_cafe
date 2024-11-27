@@ -53,7 +53,7 @@ class OrderController extends Controller
         // Buat Snap Token
         $snapToken = Snap::getSnapToken($params);
 
-        return view('order.payment', compact('snapToken', 'order', 'produk'));
+        // return view('order.payment', compact('snapToken', 'order', 'produk'));
     }
 
     public function callback(Request $request)

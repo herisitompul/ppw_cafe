@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use App\Models\Kategori;
+use App\Models\CartItem;
+use App\Models\Keranjang;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
@@ -160,7 +162,10 @@ public function dashboard()
 {
     $kategori = Kategori::all();
     $produks = Produk::all(); // Ambil semua produk dari database
-    return view('user.dashboard', compact('kategori', 'produks'));
+    $userId = auth()->id();
+    $keranjangId = Keranjang::where('user_id', $userId)->firstOrFail()->id;
+    $cartCount = CartItem::where('keranjang_id', $keranjangId)->count();
+    return view('user.dashboard', compact('kategori', 'produks', 'cartCount'));
 }
 
 
@@ -177,7 +182,10 @@ public function show($id)
                     ->where('id', '!=', $produk->id) // Menghindari produk yang sama
                     // ->take() // Mengambil 4 produk
                     ->get();
-    return view('user.show', compact('produk', 'produks'));
+    $userId = auth()->id();
+    $keranjangId = Keranjang::where('user_id', $userId)->first()->id;
+    $cartCount = CartItem::where('keranjang_id', $keranjangId)->count();
+    return view('user.show', compact('produk', 'produks', 'cartCount'));
 }
 
 public function kategoriProduk($id)
@@ -200,5 +208,6 @@ public function search(Request $request)
     // Kembalikan view dengan hasil pencarian
     return view('user.dashboard1', compact('produks', 'kategori'));
 }
+
 
 }

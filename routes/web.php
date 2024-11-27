@@ -9,6 +9,9 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\KeranjangController;
+// use App\Http\Controllers\CartController;
+
 
 Route::get('/', function () {
     return redirect()->route('admin.login');
@@ -22,7 +25,6 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::get('orders', 'AdminController@Orders')->name('admin.orders');
     });
 });
-
 // Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
 // Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
 // Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
@@ -49,9 +51,7 @@ Route::get('/kategori/{id}', [KategoriController::class, 'show'])->name('user.ka
 
 // User category route
 Route::get('/user/kategori/{id}', [ProdukController::class, 'kategoriProduk'])->name('user.kategori');
-
 Route::get('/user/ulasan', [ProdukController::class, 'ulasan'])->name('user.ulasan');
-
 Route::get('/search', [ProdukController::class, 'search'])->name('product.search');
 
 Route::post('/order/payment', [OrderController::class, 'payment'])->name('order.payment');
@@ -59,6 +59,21 @@ Route::get('/order/success', [OrderController::class, 'success'])->name('order.s
 Route::post('/payment', [PaymentController::class, 'createSnapToken'])->name('payment.snap');
 Route::post('/payment/notification', [PaymentController::class, 'handleNotification'])->name('payment.notification');
 Route::post('/payment/store', [PaymentController::class, 'storeTransaction'])->name('payment.store');
+
+
+Route::middleware(['auth'])->group(function () {
+    // Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    // Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+    // Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+    // Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::get('keranjang', [KeranjangController::class, 'Index'])->name('keranjang.index');
+    Route::post('/keranjang/add', [KeranjangController::class, 'addToCart'])->name('add.cart');
+    Route::put('/keranjang/updatestatus',[KeranjangController::class, 'UpdateStatus'])->name('keranjang.update.status');
+    Route::put('/keranjang/updatekuantitas',[KeranjangController::class, 'UpdateKuantitas'])->name('keranjang.update.kuantitas');
+    Route::delete('/delete/keranjang',[KeranjangController::class, 'Delete'])->name('delete.cart');
+});
+
+
 
 Auth::routes();
 

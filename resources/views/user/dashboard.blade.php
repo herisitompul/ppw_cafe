@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <!-- Header -->
+    {{-- <!-- Header -->
     <header class="header">
         <div class="container d-flex justify-content-between align-items-center">
             <!-- Logo and Brand Name -->
@@ -86,7 +86,8 @@
                 </div>
             </div>
         </div>
-    </header>
+    </header> --}}
+    @include('user.layout.header')
 
     <!-- Carousel Section -->
     <div id="carouselExampleIndicators" class="carousel slide mx-2 my-2" data-ride="carousel">

@@ -155,7 +155,7 @@
             style="width: 100vw; height: 400px; object-fit: cover; object-position: center;" alt="Gambar Kategori">
     </div>
 
-    <div class="text-kategory" style="margin-left: 300px; margin-top: 50px; margin-bottom: 20px;">
+    <div class="text-kategory" style="margin-left: 550px; margin-top: 50px; margin-bottom: 20px;">
         <h3>{{ $kategori->nama }}</h3>
     </div>
 

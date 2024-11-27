@@ -14,7 +14,7 @@
 
 <body>
     <!-- Header -->
-    <header class="header">
+    {{-- <header class="header">
         <div class="container d-flex justify-content-between align-items-center">
             <div class="logo d-flex align-items-center">
                 <img src="{{ asset('logo/logo.png') }}" alt="delCafe Logo" class="logo-img">
@@ -33,7 +33,7 @@
 
                 <a href="#" class="cart-icon" data-bs-toggle="modal" data-bs-target="#cartModal">
                     <button class="btn" id="cart"><i class="fas fa-shopping-cart"
-                            style="font-size: 25px;"></i>(<span id="cart-count">0</span>)</button>
+                            style="font-size: 25px;"></i>{{ $cartItem }}</button>
                 </a>
 
                 <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel"
@@ -76,7 +76,8 @@
                 </div>
             </div>
         </div>
-    </header>
+    </header> --}}
+    @include('user.layout.header')
 
     <!-- Product Section -->
     <div class="container mt-5 mb-5">
@@ -94,63 +95,70 @@
                 <h3>{{ $produk->judul }}</h3>
                 <h4>Rp {{ number_format($produk->harga, 0, ',', '.') }}</h4>
                 <p>{{ $produk->deskripsi }}</p>
-                <p><strong>Kuantitas:</strong></p>
-                <div class="d-flex align-items-center mb-3">
-                    <button class="btn btn-outline-secondary" onclick="decreaseQuantity()">-</button>
-                    <input type="text" id="quantity" class="form-control text-center mx-2" value="1"
-                        style="width: 50px;">
-                    <button class="btn btn-outline-secondary" onclick="increaseQuantity()">+</button>
-                </div>
                 <p><strong>Stok: {{ $produk->stok }}</strong></p>
-                <div class="d-flex mb-3">
-                    <button class="btn btn-secondary mr-2" onclick="addToCart()">Masukkan Keranjang</button>
-                    {{-- <form action="{{ route('order.payment') }}" method="POST"> --}}
-                    {{-- @csrf --}}
+                {{-- <p><strong>Kuantitas:</strong></p> --}}
+                <form action="{{ route('add.cart') }}" method="POST">
+                    @csrf
                     <input type="hidden" name="produk_id" value="{{ $produk->id }}">
-                    <input type="hidden" name="quantity" id="quantity-input" value="1">
-                    {{-- <button type="submit" class="btn btn-success mx-2">Beli Sekarang</button> --}}
-                    <button id="pay-button" class="btn btn-success mx-2">Bayar Sekarang</button>
-                    {{-- <script>
-                            document.getElementById('pay-button').onclick = function () {
-                                // Kirim request ke backend untuk mendapatkan snap token
-                                fetch('{{ route("payment.snap") }}', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    <label class="mb-2" for="quantity_{{ $produk->id }}"><strong>Kuantitas:</strong></label>
+                    <div class="d-flex align-items-center mb-3">
+                        <button class="btn btn-outline-secondary" type="button"
+                            onclick="decreaseQuantity({{ $produk->id }}, {{ $produk->stok }})">-</button>
+                        <input type="text" id="quantity_{{ $produk->id }}" name="kuantitas"
+                            class="form-control text-center mx-2" value="1" style="width: 50px;" readonly>
+                        <button class="btn btn-outline-secondary" type="button"
+                            onclick="increaseQuantity({{ $produk->id }}, {{ $produk->stok }})">+</button>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-secondary mr-2">Masukkan Keranjang</button>
+                </form>
+                {{-- <form action="{{ route('order.payment') }}" method="POST">
+                    @csrf --}}
+                <input type="hidden" name="produk_id" value="{{ $produk->id }}">
+                <input type="hidden" name="quantity" id="quantity-input" value="1">
+                {{-- <button type="submit" class="btn btn-success mx-2">Beli Sekarang</button> --}}
+                <button id="pay-button" class="btn btn-success mx-2">Beli Sekarang</button>
+                <script>
+                    document.getElementById('pay-button').onclick = function() {
+                        // Kirim request ke backend untuk mendapatkan snap token
+                        fetch('{{ route('payment.snap') }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                },
+                                body: JSON.stringify({
+                                    amount: 10000, // Contoh total harga
+                                    product_id: 1, // ID produk
+                                    product_name: 'Bakwan Saus Kacang',
+                                    price: 10000,
+                                    quantity: 1,
+                                }),
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                // Tampilkan Snap UI
+                                snap.pay(data.snap_token, {
+                                    onSuccess: function(result) {
+                                        alert("Pembayaran berhasil!");
+                                        console.log(result);
                                     },
-                                    body: JSON.stringify({
-                                        amount: 10000, // Contoh total harga
-                                        product_id: 1, // ID produk
-                                        product_name: 'Bakwan Saus Kacang',
-                                        price: 10000,
-                                        quantity: 1,
-                                    }),
-                                })
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        // Tampilkan Snap UI
-                                        snap.pay(data.snap_token, {
-                                            onSuccess: function(result) {
-                                                alert("Pembayaran berhasil!");
-                                                console.log(result);
-                                            },
-                                            onPending: function(result) {
-                                                alert("Menunggu pembayaran!");
-                                                console.log(result);
-                                            },
-                                            onError: function(result) {
-                                                alert("Pembayaran gagal!");
-                                                console.log(result);
-                                            }
-                                        });
-                                    });
-                            };
-                        </script> --}}
-                    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}">
-                    </script>
+                                    onPending: function(result) {
+                                        alert("Menunggu pembayaran!");
+                                        console.log(result);
+                                    },
+                                    onError: function(result) {
+                                        alert("Pembayaran gagal!");
+                                        console.log(result);
+                                    }
+                                });
+                            });
+                    };
+                </script>
+                <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}">
+                </script>
 
-                    <script>
+                {{-- <script>
                         document.getElementById('pay-button').addEventListener('click', function() {
                             snap.pay('{{ $snapToken }}', {
                                 onSuccess: function(result) {
@@ -165,13 +173,13 @@
                                 },
                             });
                         });
-                    </script>
+                    </script> --}}
 
-                    {{-- </form> --}}
-                </div>
-                <p>Kategori: {{ $produk->kategori->nama }}</p>
+                {{-- </form> --}}
             </div>
+            <p>Kategori: {{ $produk->kategori->nama }}</p>
         </div>
+    </div>
     </div><br>
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
@@ -255,6 +263,13 @@
             // Update jumlah item di cart icon dan render cart
             updateCartCount();
             renderCartItems();
+
+            // Tampilkan notifikasi SweetAlert
+            Swal.fire({
+                title: "Berhasil Memasukkan Produk ke Keranjang",
+                text: "Tekan Ok!",
+                icon: "success"
+            });
         }
 
         // Fungsi untuk memperbarui jumlah item di ikon cart
@@ -348,16 +363,43 @@
         });
 
         // Fungsi untuk menambah atau mengurangi jumlah kuantitas
-        function increaseQuantity() {
-            let quantity = parseInt(document.getElementById('quantity').value);
-            if (quantity < 10) document.getElementById('quantity').value = quantity + 1;
+        function increaseQuantity(produk_id, stok) {
+            const quantityInput = document.getElementById(`quantity_${produk_id}`);
+            let currentQuantity = parseInt(quantityInput.value);
+            if (currentQuantity < stok) {
+                quantityInput.value = currentQuantity + 1;
+            }
         }
 
-        function decreaseQuantity() {
-            let quantity = parseInt(document.getElementById('quantity').value);
-            if (quantity > 1) document.getElementById('quantity').value = quantity - 1;
+        function decreaseQuantity(produk_id, stok) {
+            const quantityInput = document.getElementById(`quantity_${produk_id}`);
+            let currentQuantity = parseInt(quantityInput.value);
+            if (currentQuantity > 1) {
+                quantityInput.value = currentQuantity - 1;
+            }
         }
     </script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                title: "Berhasil Memasukkan Produk ke Keranjang",
+                text: "Tekan Ok!",
+                icon: "success"
+            });
+        </script>
+    @endif --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                title: "{{ session('success') }}",
+                text: "Tekan Ok!",
+                icon: "success"
+            });
+        </script>
+    @endif
+
 </body>
 
 </html>
