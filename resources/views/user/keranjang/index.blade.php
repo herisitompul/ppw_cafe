@@ -105,6 +105,58 @@
             </div>
         </div>
 
+        <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}">
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                $('.btn-orange').on('click', function() {
+                    let subtotal = parseInt($('#subtotal').text().replace(/[^\d]/g, ''));
+
+                    if (subtotal <= 0) {
+                        alert('Keranjang kosong, silakan tambahkan produk!');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: "{{ route('checkout') }}",
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            subtotal: subtotal
+                        },
+                        success: function(response) {
+                            if (response.snapToken) {
+                                // Memunculkan Snap Popup
+                                snap.pay(response.snapToken, {
+                                    onSuccess: function(result) {
+                                        alert('Pembayaran berhasil!');
+                                        // Redirect ke halaman sukses
+                                        window.location.href =  "/orders/" + result.order_id;
+                                    },
+                                    onPending: function(result) {
+                                        alert('Pembayaran pending!');
+                                        // Redirect ke halaman pending
+                                        // window.location.href = "/pending";
+                                    },
+                                    onError: function(result) {
+                                        alert('Pembayaran gagal!');
+                                        // console.error(result);
+                                    },
+                                });
+                            } else {
+                                alert('Gagal memproses pembayaran.');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            alert('Terjadi kesalahan, silakan coba lagi.');
+                            console.error(xhr.responseText);
+                        }
+                    });
+                });
+            });
+        </script>
+
         <script>
             $(document).ready(function() {
 

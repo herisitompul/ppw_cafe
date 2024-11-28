@@ -263,13 +263,6 @@
             // Update jumlah item di cart icon dan render cart
             updateCartCount();
             renderCartItems();
-
-            // Tampilkan notifikasi SweetAlert
-            Swal.fire({
-                title: "Berhasil Memasukkan Produk ke Keranjang",
-                text: "Tekan Ok!",
-                icon: "success"
-            });
         }
 
         // Fungsi untuk memperbarui jumlah item di ikon cart
@@ -379,7 +372,7 @@
             }
         }
     </script>
-    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @if (session('success'))
         <script>
             Swal.fire({
@@ -388,18 +381,7 @@
                 icon: "success"
             });
         </script>
-    @endif --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    @if (session('success'))
-        <script>
-            Swal.fire({
-                title: "{{ session('success') }}",
-                text: "Tekan Ok!",
-                icon: "success"
-            });
-        </script>
     @endif
-
 </body>
 
 </html>

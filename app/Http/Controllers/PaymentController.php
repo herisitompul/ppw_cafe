@@ -8,61 +8,94 @@ use Midtrans\Snap;
 
 class PaymentController extends Controller
 {
-    public function createSnapToken(Request $request)
+    public function checkout(Request $request)
     {
         // Konfigurasi Midtrans
-        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
-        // Data Transaksi
-        $params = [
-            'transaction_details' => [
-                'order_id' => uniqid('order-'),
-                'gross_amount' => $request->amount, // Total harga
-            ],
-            'customer_details' => [
-                'first_name' => auth()->user()->name,
-                'email' => auth()->user()->email,
-            ],
-            'item_details' => [
-                [
-                    'id' => $request->product_id,
-                    'price' => $request->price,
-                    'quantity' => $request->quantity,
-                    'name' => $request->product_name,
-                ],
-            ],
+        // Data pembayaran
+        $transactionDetails = [
+            'order_id' => uniqid(), // ID pesanan unik
+            'gross_amount' => $request->subtotal, // Total pembayaran
         ];
 
-        // Membuat Snap Token
-        $snapToken = Snap::getSnapToken($params);
+        // Data pelanggan
+        $customerDetails = [
+            'first_name' => auth()->user()->name,
+            'email' => auth()->user()->email,
+        ];
 
-        return response()->json(['snap_token' => $snapToken]);
+        // Parameter Snap
+        $snapParams = [
+            'transaction_details' => $transactionDetails,
+            'customer_details' => $customerDetails,
+        ];
+
+        try {
+            $snapToken = Snap::getSnapToken($snapParams);
+            return response()->json(['snapToken' => $snapToken]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
-    public function storeTransaction(Request $request)
-    {
-        // Validasi data dari frontend
-        $validatedData = $request->validate([
-            'produk_id' => 'required|exists:produk,id',
-            'quantity' => 'required|integer|min:1',
-            'total_price' => 'required|numeric|min:0',
-            'status' => 'required|string',
-        ]);
+    public function checkoutWithQuantity(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'amount' => 'required|numeric',        // Total pembayaran (dihitung di frontend)
+        'product_id' => 'required|integer',   // ID produk
+        'product_name' => 'required|string',  // Nama produk
+        'price' => 'required|numeric',        // Harga satuan
+        'quantity' => 'required|integer|min:1', // Kuantitas
+    ]);
 
-        // Simpan data transaksi ke tabel orders
-        $order = \App\Models\Order::create([
-            'user_id' => auth()->id(), // ID pengguna yang sedang login
-            'produk_id' => $validatedData['produk_id'],
-            'quantity' => $validatedData['quantity'],
-            'total_price' => $validatedData['total_price'],
-            'status' => $validatedData['status'], // Misalnya: "success", "pending", atau "failed"
-        ]);
+    // Konfigurasi Midtrans
+    Config::$serverKey = config('midtrans.server_key');
+    Config::$isProduction = config('midtrans.is_production');
+    Config::$isSanitized = true;
+    Config::$is3ds = true;
 
-        return response()->json(['message' => 'Pesanan berhasil disimpan', 'order' => $order]);
+    // Data pembayaran
+    $transactionDetails = [
+        'order_id' => uniqid(), // ID pesanan unik
+        'gross_amount' => $request->amount, // Total pembayaran dihitung di frontend
+    ];
+
+    // Data pelanggan
+    $customerDetails = [
+        'first_name' => auth()->user()->name,
+        'email' => auth()->user()->email,
+    ];
+
+    // Data item untuk rincian di Midtrans
+    $itemDetails = [
+        [
+            'id' => $request->product_id,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'name' => $request->product_name,
+        ],
+    ];
+
+    // Parameter Snap
+    $snapParams = [
+        'transaction_details' => $transactionDetails,
+        'customer_details' => $customerDetails,
+        'item_details' => $itemDetails,
+    ];
+
+    try {
+        $snapToken = Snap::getSnapToken($snapParams);
+        return response()->json(['snapToken' => $snapToken]);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
+
 
 
 }

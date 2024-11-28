@@ -8,6 +8,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\KeranjangController;
 // use App\Http\Controllers\CartController;
@@ -71,8 +72,25 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/keranjang/updatestatus',[KeranjangController::class, 'UpdateStatus'])->name('keranjang.update.status');
     Route::put('/keranjang/updatekuantitas',[KeranjangController::class, 'UpdateKuantitas'])->name('keranjang.update.kuantitas');
     Route::delete('/delete/keranjang',[KeranjangController::class, 'Delete'])->name('delete.cart');
-});
+    Route::post('/orders/create-from-cart', [OrderController::class, 'createOrderFromCart']);
+    Route::get('/orders', [OrderController::class, 'getUserOrders']);
+    Route::patch('/orders/{orderId}/status', [OrderController::class, 'updateOrderStatus']);
 
+    // Order Item Routes
+    Route::get('/order-items/{orderItemId}', [OrderItemController::class, 'getOrderItemDetails']);
+});
+Route::post('/checkout', [PaymentController::class, 'checkout'])->name('checkout');
+Route::get('/success', function () {
+    return view('payment.success');
+})->name('payment.success');
+
+Route::get('/pending', function () {
+    return view('payment.pending');
+})->name('payment.pending');
+
+Route::post('/payment/snap', [PaymentController::class, 'checkoutWithQuantity'])->name('payment.snap');
+Route::post('/midtrans/callback', [OrderController::class, 'callback'])->name('midtrans.callback');
+Route::get('/orders/{order_id}', [OrderController::class, 'show'])->name('orders.show');
 
 
 Auth::routes();
