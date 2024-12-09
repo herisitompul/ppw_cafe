@@ -12,7 +12,7 @@
         <div class="icons d-flex align-items-center">
             <!-- Search Bar -->
             <div class="search-box">
-                <form action="{{ route('product.search') }}" method="GET" style="display: flex; width: 100%;">
+                <form action="{{ route('search.product') }}" method="GET" style="display: flex; width: 100%;">
                     <input type="text" name="search" placeholder="Cari produk..." required>
                     <button type="submit"><i class="fas fa-search"></i></button>
                 </form>

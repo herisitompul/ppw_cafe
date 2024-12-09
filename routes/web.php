@@ -10,6 +10,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\KeranjangController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/', function () {
     return redirect()->route('admin.login');
@@ -54,10 +55,14 @@ Route::get('/user/kategori/{id}', [ProdukController::class, 'kategoriProduk'])->
 Route::get('/user/ulasan', [ProdukController::class, 'ulasan'])->name('user.ulasan');
 
 Route::get('/search', [ProdukController::class, 'search'])->name('product.search');
+Route::get('/searchProduct', [ProdukController::class, 'searchProduct'])->name('search.product');
 
 Route::get('/pesanan', [ProdukController::class, 'myOrder'])->name('pesanan.saya');
+//daftar
+Route::get('/daftar', [ProdukController::class, 'daftar'])->name('produk.daftar');
 
-
+Route::put('/daftar/{id}', [ProdukController::class, 'cancel'])->name('daftar.cancel');
+Route::get('/admin/reviews', [ReviewController::class, 'index'])->name('admin.reviews.index');
 
 Route::middleware(['auth'])->group(function () {
     // Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
@@ -77,6 +82,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pay-now', [OrderController::class, 'payNow'])->name('pay.now');
 
     Route::post('/payment/callback', [PaymentController::class, 'handleCallback']);
+    Route::post('/midtrans-callback', [OrderController::class, 'callback']);
+    Route::get('/invoice/{id}', [OrderController::class, 'invoice']);
+
+    Route::get('/order/{order}/review', [ReviewController::class, 'create'])->name('order.review');
+    Route::post('/order/{order}/review', [ReviewController::class, 'store'])->name('order.review.store');
 
 });
 

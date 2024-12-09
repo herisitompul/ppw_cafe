@@ -218,11 +218,28 @@ public function search(Request $request)
     $keyword = $request->input('search');
 
     // Cari produk berdasarkan judul
+    $produk = Produk::where('judul', 'like', '%' . $keyword . '%')->get();
+    $kategori = Kategori::where('nama', 'like', '%' . $keyword . '%')->get();
+
+    // Kembalikan view dengan hasil pencarian
+    return view('produk.index', compact('produk', 'kategori'));
+}
+
+public function searchProduct(Request $request)
+{
+    // Ambil kata kunci pencarian dari input pengguna
+    $keyword = $request->input('search');
+    $userId = auth()->id();
+    $keranjang = Keranjang::where('user_id', $userId)->first();
+    $cartItem = CartItem::where('keranjang_id', $keranjang->id)->get();
+    $cartCount = $cartItem->count();
+
+    // Cari produk berdasarkan judul
     $produks = Produk::where('judul', 'like', '%' . $keyword . '%')->get();
     $kategori = Kategori::where('nama', 'like', '%' . $keyword . '%')->get();
 
     // Kembalikan view dengan hasil pencarian
-    return view('user.dashboard1', compact('produks', 'kategori'));
+    return view('user.dashboard1', compact('produks', 'kategori', 'cartItem', 'cartCount'));
 }
 
 public function myOrder()
@@ -237,6 +254,28 @@ public function myOrder()
     return view('user.pesanan.index', compact('orders', 'orderItems', 'cartCount'));
 }
 
+public function daftar()
+{
 
+    $orders = Order::with(['orderItem.produk.kategori'])->latest()->get();
+
+    return view('produk.daftar', compact('orders'));
+}
+
+public function cancel($id)
+{
+    // Cari pesanan berdasarkan ID
+    $order = Order::findOrFail($id);
+
+    // Periksa status, jika 'pending' baru bisa dibatalkan
+    if ($order->status == 'pending') {
+        $order->status = 'cancel';
+        $order->save();
+
+        return redirect()->route('produk.daftar')->with('success', 'Pesanan berhasil dibatalkan');
+    }
+
+    return redirect()->route('produk.daftar')->with('error', 'Pesanan tidak dapat dibatalkan');
+}
 
 }
