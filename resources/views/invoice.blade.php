@@ -171,14 +171,6 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .summary-actions a button {
-            background-color: #0066ff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
 
         .summary-actions .dropdown {
             position: relative;
@@ -247,9 +239,6 @@
                 </div>
             </div>
             <div class="summary-actions">
-                <a href="{{ route('order.review', $order->id) }}">
-                    <button class="mx-2" type="button">Berikan Ulasan</button>
-                </a>
                 <form action="{{route('cancel.order', $order->id)}}" method="POST">
                     @csrf
                     @method('PUT')
@@ -270,10 +259,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
 
 </body>
 
