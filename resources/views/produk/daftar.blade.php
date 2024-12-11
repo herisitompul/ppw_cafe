@@ -16,8 +16,15 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    $totalPenjualan = 0; // Inisialisasi total
+                @endphp
                 @forelse ($orders as $order)
                     @foreach ($order->orderItem as $item)
+                        @php
+                            // Tambahkan harga item ke total penjualan
+                            $totalPenjualan += $item->harga * $item->kuantitas;
+                        @endphp
                         <tr>
                             <td>{{ $order->order_number }}</td>
                             <td>{{ $order->user->name }}</td>
@@ -34,8 +41,7 @@
                                 @endif
                             </td>
                             <td>
-                                <img src="{{ asset('gambar/' . $item->produk->gambar) }}" alt="Gambar Produk"
-                                    width="50">
+                                <img src="{{ asset('gambar/' . $item->produk->gambar) }}" alt="Gambar Produk" width="50">
                             </td>
                             <td>
                                 @if ($order->status == 'pending')
@@ -45,7 +51,11 @@
                                         <button class="btn btn-danger btn-sm" type="submit">Batalkan</button>
                                     </form>
                                 @else
-                                    <button class="btn btn-secondary btn-sm" disabled>Tidak Ada Aksi</button>
+                                    <form action="{{ route('order.delete', $order->id) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                                    </form>
                                 @endif
                             </td>
                         </tr>
@@ -56,8 +66,13 @@
                     </tr>
                 @endforelse
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="text-end"><strong>Total Penjualan:</strong></td>
+                    <td colspan="4"><strong>Rp {{ number_format($totalPenjualan) }}</strong></td>
+                </tr>
+            </tfoot>
         </table>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
 @endsection

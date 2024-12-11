@@ -278,4 +278,21 @@ public function cancel($id)
     return redirect()->route('produk.daftar')->with('error', 'Pesanan tidak dapat dibatalkan');
 }
 
+public function deleteOrder(Request $request, $id)
+{
+    // Temukan order berdasarkan ID
+    $order = Order::find($id);
+
+    // Pastikan order ditemukan
+    if (!$order) {
+        return back()->with('error', 'Pesanan tidak ditemukan.');
+    }
+
+    // Hapus order
+    $order->delete();
+
+    // Redirect dengan pesan sukses
+    return back()->with('success', 'Pesanan berhasil dihapus.');
+}
+
 }
