@@ -52,9 +52,13 @@ class ReviewController extends Controller
         // Ambil data ulasan produk dengan relasi produk dan pengguna
         $reviews = Review::with(['produk', 'user'])->get();
 
-        // Kirim data ulasan ke tampilan admin
-        return view('produk.reviews', compact('reviews'));
+        // Hitung total ulasan
+        $totalReviews = $reviews->count();
+
+        // Kirim data ulasan dan total ulasan ke tampilan admin
+        return view('produk.reviews', compact('reviews', 'totalReviews'));
     }
+
 
     public function deleteReview(Request $request, $id)
 {

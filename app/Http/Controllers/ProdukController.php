@@ -83,42 +83,6 @@ class ProdukController extends Controller
         return view('produk.edit', compact('produk', 'kategori'));;
     }
 
-    // // Update produk yang ada
-    // public function update(Request $request, $id)
-    // {
-    //     $request->validate([
-    //         'judul' => 'required',
-    //         'deskripsi' => 'required',
-    //         'harga' => 'required|numeric',
-    //         'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
-    //     ]);
-
-    //     $produk = Produk::findOrFail($id);
-
-    //     // Jika ada gambar baru, hapus gambar lama dan upload yang baru
-    //     if ($request->hasFile('gambar')) {
-    //         if (file_exists(public_path('gambar/' . $produk->gambar))) {
-    //             unlink(public_path('gambar/' . $produk->gambar));
-    //         }
-
-    //         $file = $request->file('gambar');
-    //         $nama_file = time() . "_" . $file->getClientOriginalName();
-    //         $file->move(public_path('gambar'), $nama_file);
-
-    //         $produk->gambar = $nama_file;
-    //     }
-
-    //     // Update data produk
-    //     $produk->update([
-    //         'judul' => $request->judul,
-    //         'deskripsi' => $request->deskripsi,
-    //         'harga' => $request->harga,
-    //         'gambar' => $nama_file
-    //     ]);
-
-    //     return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui');
-    // }
-    // Update produk yang ada
 public function update(Request $request, $id)
 {
     $request->validate([
