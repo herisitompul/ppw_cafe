@@ -56,4 +56,21 @@ class ReviewController extends Controller
         return view('produk.reviews', compact('reviews'));
     }
 
+    public function deleteReview(Request $request, $id)
+{
+    // Temukan order berdasarkan ID
+    $reviews = Review::find($id);
+
+    // Pastikan order ditemukan
+    if (!$reviews) {
+        return back()->with('error', 'Ulasan tidak ditemukan.');
+    }
+
+    // Hapus order
+    $reviews->delete();
+
+    // Redirect dengan pesan sukses
+    return back()->with('success', 'Ulasan berhasil dihapus.');
+}
+
 }

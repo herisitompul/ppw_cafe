@@ -28,6 +28,14 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('produk.daftar') }}">
+            <i class="fas fa-dollar-sign"></i>
+            <span>Daftar Pesanan</span>
+        </a>
+        <a class="nav-link collapsed" href="{{ route('admin.reviews.index') }}">
+            <i class="fas fa-comment"></i>
+            <span>Daftar Ulasan</span>
+        </a>
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-cog"></i>
@@ -36,16 +44,16 @@
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Produk:</h6>
-                <a class="collapse-item" href="{{route('produk.create')}}">Tambah Produk</a>
-                <a class="collapse-item" href="{{route('produk.index')}}">List Produk</a>
-                <a class="collapse-item" href="{{route('produk.daftar')}}">Daftar Produk</a>
-                <a class="collapse-item" href="{{route('admin.reviews.index')}}">Daftar Ulasan</a>
+                <a class="collapse-item" href="{{ route('produk.create') }}">Tambah Produk</a>
+                <a class="collapse-item" href="{{ route('produk.index') }}">List Produk</a>
+                <a class="collapse-item" href="{{ route('produk.daftar') }}">Daftar Produk</a>
+                <a class="collapse-item" href="{{ route('admin.reviews.index') }}">Daftar Ulasan</a>
                 {{-- <a class="collapse-item" href="cards.html">List</a> --}}
             </div>
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Custom Kategori:</h6>
-                <a class="collapse-item" href="{{route('kategori.create')}}">Tambah Kategori</a>
-                <a class="collapse-item" href="{{route('kategori.index')}}">List Kategori</a>
+                <a class="collapse-item" href="{{ route('kategori.create') }}">Tambah Kategori</a>
+                <a class="collapse-item" href="{{ route('kategori.index') }}">List Kategori</a>
                 {{-- <a class="collapse-item" href="cards.html">List</a> --}}
             </div>
         </div>

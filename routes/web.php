@@ -60,9 +60,11 @@ Route::get('/searchProduct', [ProdukController::class, 'searchProduct'])->name('
 Route::get('/pesanan', [ProdukController::class, 'myOrder'])->name('pesanan.saya');
 //daftar
 Route::get('/daftar', [ProdukController::class, 'daftar'])->name('produk.daftar');
+Route::delete('/orders/{id}', [ProdukController::class, 'deleteOrder'])->name('order.delete');
 
 Route::put('/daftar/{id}', [ProdukController::class, 'cancel'])->name('daftar.cancel');
 Route::get('/admin/reviews', [ReviewController::class, 'index'])->name('admin.reviews.index');
+Route::delete('/reviews/{id}', [ReviewController::class, 'deleteReview'])->name('review.delete');
 
 Route::middleware(['auth'])->group(function () {
     // Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
@@ -82,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pay-now', [OrderController::class, 'payNow'])->name('pay.now');
 
     Route::post('/payment/callback', [PaymentController::class, 'handleCallback']);
-    Route::post('/midtrans-callback', [OrderController::class, 'callback']);
+    // Route::post('/midtrans-callback', [OrderController::class, 'callback']);
     Route::get('/invoice/{id}', [OrderController::class, 'invoice']);
 
     Route::get('/order/{order}/review', [ReviewController::class, 'create'])->name('order.review');

@@ -12,6 +12,8 @@
                     <th>Rating</th>
                     <th>Ulasan</th>
                     <th>Tanggal</th>
+                    <th>Aksi</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +25,13 @@
                     <td>{{ $review->rating }}</td>
                     <td>{{ $review->review }}</td>
                     <td>{{ $review->created_at->format('d-m-Y') }}</td>
+                    <td>
+                    <form action="{{ route('review.delete', $review->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm" type="submit">Delete</button>
+                    </form>
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
