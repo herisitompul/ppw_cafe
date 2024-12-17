@@ -83,6 +83,7 @@ class ProdukController extends Controller
         return view('produk.edit', compact('produk', 'kategori'));;
     }
 
+
 public function update(Request $request, $id)
 {
     $request->validate([

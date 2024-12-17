@@ -84,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pay-now', [OrderController::class, 'payNow'])->name('pay.now');
 
     Route::post('/payment/callback', [PaymentController::class, 'handleCallback']);
-    // Route::post('/midtrans-callback', [OrderController::class, 'callback']);
+    Route::post('/midtrans-callback', [OrderController::class, 'callback']);
     Route::get('/invoice/{id}', [OrderController::class, 'invoice']);
 
     Route::get('/order/{order}/review', [ReviewController::class, 'create'])->name('order.review');
