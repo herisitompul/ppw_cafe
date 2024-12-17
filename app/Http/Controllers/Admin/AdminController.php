@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
+use App\Models\Review;
 
 class AdminController extends Controller
 {
@@ -27,7 +29,18 @@ class AdminController extends Controller
 
     public function Dashboard()
     {
-        return view('Admin.Dashboard');
+        $orders = Order::with('orderItem.produk.kategori', 'user')->get();
+        $totalReviews = Review::count();
+        // Hitung total penjualan
+        $totalPenjualan = 0;
+        foreach ($orders as $order) {
+            foreach ($order->orderItem as $item) {
+                $totalPenjualan += $item->harga * $item->kuantitas;
+            }
+        }
+
+        return view('Admin.dashboard', compact('orders', 'totalPenjualan', 'totalReviews'));
+        // return view('Admin.Dashboard');
     }
 
     public function Logout()
