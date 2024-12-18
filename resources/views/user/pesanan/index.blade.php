@@ -198,81 +198,102 @@
         .dropdown:hover .dropdown-content {
             display: block;
         }
+
+        .no-orders {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .no-orders h2 {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .no-orders p {
+            color: #999;
+        }
     </style>
 </head>
 
 <body>
     @include('user.layout.header')
 
-    @foreach ($orders as $order)
-        <div class="container-header mt-5">
-            <div class="order-header">
-                <h1>#{{ $order->order_number }}</h1>
-                @if ($order->status == 'pending')
-                    <div class="status">
-                        <span>Payment pending</span>
-                    </div>
-                @endif
-            </div>
-            <p>{{ $order->created_at }}</p>
-            <div class="order-details">
-                @foreach ($orderItems->where('order_id', $order->id) as $orderItem)
-                    <div class="order-item">
-                        <img src="{{ asset('gambar/' . $orderItem->produk->gambar) }}" alt="Product image">
-                        <div class="order-item-details">
-                            <a href="#">{{ $orderItem->produk->judul }}</a>
-                            <p>{{ $orderItem->produk->kategori->nama }}</p>
+    @if($orders->count() > 0)
+        @foreach ($orders as $order)
+            <div class="container-header mt-5">
+                <div class="order-header">
+                    <h1>#{{ $order->order_number }}</h1>
+                    @if ($order->status == 'pending')
+                        <div class="status">
+                            <span>Payment pending</span>
                         </div>
-                        <div class="order-item-price">Rp {{ number_format($orderItem->harga) }} ×
-                            {{ $orderItem->kuantitas }} = Rp
-                            {{ number_format($orderItem->harga * $orderItem->kuantitas) }}</div>
+                    @endif
+                </div>
+                <p>{{ $order->created_at }}</p>
+                <div class="order-details">
+                    @foreach ($orderItems->where('order_id', $order->id) as $orderItem)
+                        <div class="order-item">
+                            <img src="{{ asset('gambar/' . $orderItem->produk->gambar) }}" alt="Product image">
+                            <div class="order-item-details">
+                                <a href="#">{{ $orderItem->produk->judul }}</a>
+                                <p>{{ $orderItem->produk->kategori->nama }}</p>
+                            </div>
+                            <div class="order-item-price">Rp {{ number_format($orderItem->harga) }} ×
+                                {{ $orderItem->kuantitas }} = Rp
+                                {{ number_format($orderItem->harga * $orderItem->kuantitas) }}</div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="order-summary">
+                    <div class="summary-header">
+                        @if ($order->status == 'pending')
+                            <div class="status warning">{{ $order->status }}</div>
+                        @elseif ($order->status == 'complete')
+                            <div class="status success">{{ $order->status }}</div>
+                        @else
+                            <div class="status danger">{{ $order->status }}</div>
+                        @endif
                     </div>
-                @endforeach
-
-            </div>
-            <div class="order-summary">
-                <div class="summary-header">
-                    @if ($order->status == 'pending')
-                        <div class="status warning">{{ $order->status }}</div>
-                    @elseif ($order->status == 'complete')
-                        <div class="status success">{{ $order->status }}</div>
-                    @else
-                        <div class="status danger">{{ $order->status }}</div>
-                    @endif
+                    <div class="summary-details">
+                        <p class="summary-total"><span>Total</span> <span>Rp
+                                {{ number_format($order->total_price) }}</span></p>
+                        <p><span>Pembayaran</span> <span>Rp {{ number_format($order->total_price) }}</span></p>
+                    </div>
                 </div>
-                <div class="summary-details">
-                    <p class="summary-total"><span>Total</span> <span>Rp
-                            {{ number_format($order->total_price) }}</span></p>
-                    <p><span>Pembayaran</span> <span>Rp {{ number_format($order->total_price) }}</span></p>
+                <div class="summary-actions">
+                    <a href="{{ route('order.review', $order->id) }}">
+                        <button class="mx-2" type="button">Berikan Ulasan</button>
+                    </a>
+                    <form action="{{route('cancel.order', $order->id)}}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        @if ($order->status == 'pending')
+                        <button type="submit">Batalkan Pesanan</button>
+                        @elseif ($order->status == 'cancel')
+                        @else
+                        <button disabled type="submit">Batalkan Pesanan</button>
+                        @endif
+                    </form>
                 </div>
             </div>
-            <div class="summary-actions">
-                <a href="{{ route('order.review', $order->id) }}">
-                    <button class="mx-2" type="button">Berikan Ulasan</button>
-                </a>
-                <form action="{{route('cancel.order', $order->id)}}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    @if ($order->status == 'pending')
-                    <button type="submit">Batalkan Pesanan</button>
-                    @elseif ($order->status == 'cancel')
-                    @else
-                    <button disabled type="submit">Batalkan Pesanan</button>
-                    @endif
-                </form>
+        @endforeach
+    @else
+        <div class="container-header mt-5">
+            <div class="no-orders">
+                <h2>Tidak Ada Pesanan</h2>
+                <p>Anda belum memiliki pesanan saat ini.</p>
+                <a href="{{ route('user.dashboard') }}" class="btn btn-primary">Lihat Menu</a>
             </div>
         </div>
-    @endforeach
+    @endif
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
-
 
 
 </body>

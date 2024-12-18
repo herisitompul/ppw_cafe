@@ -12,36 +12,26 @@ Route::get('/user', function (Request $request) {
 
 
 Route::prefix('v1')->group(function () {
-    // Endpoint untuk mengambil semua produk
-    Route::get('/produk', [ProdukApiController::class, 'index']);
-
-    // Endpoint untuk menambahkan produk baru
-    Route::post('/produk', [ProdukApiController::class, 'store']);
-
-    // Endpoint untuk menampilkan detail produk berdasarkan ID
-    Route::get('/produk/{id}', [ProdukApiController::class, 'show']);
-
-    // Endpoint untuk memperbarui produk
-    Route::put('/produk/{id}', [ProdukApiController::class, 'update']);
-
-    // Endpoint untuk menghapus produk
-    Route::delete('/produk/{id}', [ProdukApiController::class, 'destroy']);
+    Route::get('/produk', [ProdukApiController::class, 'index'])->name('produk.index');
+    Route::post('/produk', [ProdukApiController::class, 'store'])->name('produk.store');
+    Route::get('/produk/{produk}', [ProdukApiController::class, 'show'])->name('produk.show');
+    Route::put('/produk/{produk}', [ProdukApiController::class, 'update'])->name('produk.update');
+    Route::delete('/produk/{produk}', [ProdukApiController::class, 'destroy'])->name('produk.destroy');
 });
 
 Route::prefix('v2')->group(function () {
     // Endpoint untuk mengambil semua kategori
-    Route::get('/kategori', [KategoriApiController::class, 'index']);
+    Route::get('/kategori', [KategoriApiController::class, 'index'])->name('kategori.index');
 
     // Endpoint untuk menambahkan kategori baru
-    Route::post('/kategori', [KategoriApiController::class, 'store']);
+    Route::post('/kategori', [KategoriApiController::class, 'store'])->name('kategori.store');
 
     // Endpoint untuk menampilkan detail kategori berdasarkan ID
-    Route::get('/kategori/{id}', [KategoriApiController::class, 'show']);
+    Route::get('/kategori/{kategori}', [KategoriApiController::class, 'show'])->name('kategori.show');
 
     // Endpoint untuk memperbarui kategori
-    // Route::put('/kategori/{id}', [KategoriApiController::class, 'update']);
-    Route::put('/kategori/{kategori}', [KategoriApiController::class, 'update']);
+    Route::put('/kategori/{kategori}', [KategoriApiController::class, 'update'])->name('kategori.update');
 
     // Endpoint untuk menghapus kategori
-    Route::delete('/kategori/{id}', [KategoriApiController::class, 'destroy']);
+    Route::delete('/kategori/{kategori}', [KategoriApiController::class, 'destroy'])->name('kategori.destroy');
 });
