@@ -33,7 +33,7 @@
                         <strong>{{ auth()->user()->name }}</strong><br>
                         <small>{{ auth()->user()->email }}</small><br>
                     </div>
-                    <a class="dropdown-item" href="#">Pesanan saya</a>
+                    {{-- <a class="dropdown-item" href="#">Pesanan saya</a> --}}
                     <hr>
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf

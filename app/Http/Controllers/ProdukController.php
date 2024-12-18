@@ -168,7 +168,7 @@ public function show($id)
 
 public function kategoriProduk($id)
 {
-    $produk = Produk::with('kategori')->findOrFail($id);
+    // $produk = Produk::with('kategori')->findOrFail($id);
     $kategori = Kategori::findOrFail($id); // Get the category by ID
     $produks = Produk::where('kategori_id', $id)->get(); // Get all products in this category
     $userId = auth()->id();

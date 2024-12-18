@@ -46,8 +46,6 @@
                 <h6 class="collapse-header">Custom Produk:</h6>
                 <a class="collapse-item" href="{{ route('produk.create') }}">Tambah Produk</a>
                 <a class="collapse-item" href="{{ route('produk.index') }}">List Produk</a>
-                <a class="collapse-item" href="{{ route('produk.daftar') }}">Daftar Produk</a>
-                <a class="collapse-item" href="{{ route('admin.reviews.index') }}">Daftar Ulasan</a>
                 {{-- <a class="collapse-item" href="cards.html">List</a> --}}
             </div>
             <div class="bg-white py-2 collapse-inner rounded">
