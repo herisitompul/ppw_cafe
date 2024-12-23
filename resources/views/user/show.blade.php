@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script>
 </head>
 
@@ -49,7 +50,7 @@
                     <div class="mb-3">
                         {{-- <button type="submit" class="btn btn-secondary mr-2">Masukkan Keranjang</button> --}}
                         <p>Kategori: {{ $produk->kategori->nama }}</p>
-                        <button type="submit" class="btn btn-success mr-2">Beli Sekarang</button>
+                        <button type="submit" class="btn btn-success mr-2">Masukkan Ke Keranjang</button>
                     </div>
                 </form>
             </div>

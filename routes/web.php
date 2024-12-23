@@ -13,7 +13,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
 
 Route::get('/', function () {
-    return redirect()->route('admin.login');
+    return redirect()->route('user.dashboard');
 });
 
 Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function () {
@@ -23,21 +23,6 @@ Route::prefix('/admin')->namespace('App\Http\Controllers\Admin')->group(function
         Route::get('logout', 'AdminController@Logout')->name('admin.logout');
     });
 });
-
-// Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
-// Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
-// Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
-// Route::delete('/produk/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
-// Route::get('/produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
-// Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
-
-// Route::get('/kategori/create', [KategoriController::class, 'create'])->name('kategori.create');
-// Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
-// Route::get('/kategori/index', [KategoriController::class, 'index'])->name('kategori.index');
-// Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
-// Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit'])->name('kategori.edit');
-// Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
-// Route::get('/kategori/{id}', [KategoriController::class, 'show'])->name('kategori.show');
 
 Route::resource('produk', ProdukController::class);
 Route::resource('kategori', KategoriController::class);
@@ -67,10 +52,6 @@ Route::get('/admin/reviews', [ReviewController::class, 'index'])->name('admin.re
 Route::delete('/reviews/{id}', [ReviewController::class, 'deleteReview'])->name('review.delete');
 
 Route::middleware(['auth'])->group(function () {
-    // Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
-    // Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-    // Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
-    // Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
     Route::get('keranjang', [KeranjangController::class, 'Index'])->name('keranjang.index');
     Route::post('/keranjang/add', [KeranjangController::class, 'addToCart'])->name('add.cart');
     Route::put('/keranjang/updatestatus',[KeranjangController::class, 'UpdateStatus'])->name('keranjang.update.status');
@@ -92,11 +73,5 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-// Route::post('/process-payment', [PaymentController::class, 'processPayment'])
-//     ->name('process.payment');
-// Route::get('/payment/success', [PaymentController::class, 'paymentSuccess'])
-//     ->name('payment.success');
-
 Auth::routes();
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

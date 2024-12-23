@@ -7,7 +7,6 @@ use App\Models\Order;
 use App\Models\CartItem;
 use App\Models\OrderItem;
 use App\Models\Keranjang;
-// use App\Services\MidtransService;
 
 
 class OrderController extends Controller
@@ -22,11 +21,8 @@ class OrderController extends Controller
         $orderItems = OrderItem::where('order_id', $order->id)->get();
 
         \Midtrans\Config::$serverKey = config('midtrans.server_key');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
         \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
         \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
 
         $params = array(
@@ -41,10 +37,6 @@ class OrderController extends Controller
         );
 
         $snapToken = \Midtrans\Snap::getSnapToken($params);
-
-        // return redirect()->route('order.index')->with('success', 'Order berhasil dibuat');
-        // return view('user.order.index', compact('snapToken', 'order'));
-
         return view('user.order.index', compact('cartCount', 'cartItem', 'order', 'orderItems', 'snapToken'));
     }
 

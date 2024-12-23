@@ -1,3 +1,10 @@
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
 .header {
     background-color: #0000000a;
     padding: 10px 20px;
@@ -42,7 +49,6 @@
     align-items: center;
 }
 
-
 /* Search bar */
 .search-box {
     display: flex;
@@ -78,7 +84,6 @@
     font-size: 18px;
     color: #333;
 }
-
 
 /* Icons styling */
 .cart-icon {
@@ -195,12 +200,13 @@
 } */
 
 /* Footer Styles */
+/* Footer styling */
 .footer {
     background-color: #7ca577;
-    /* Warna hijau dari gambar */
-    padding: 20px 0;
-    color: #fff;
-    display: flex;
+    color: white;
+    padding: 20px;
+    /* text-align: center; */
+    margin-top: auto;
     justify-content: center;
     align-items: center;
 }
@@ -259,6 +265,7 @@
 
 .product-image {
     /* max-width: 100%; */
+    margin-top: 30px;
     width: 500px;
     height: auto;
     margin-left: 140px;
@@ -271,6 +278,7 @@
 }
 
 .product-detail {
+    margin-top: 20px;
     padding-left: 30px;
 }
 

@@ -5,19 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- @TODO: replace SET_YOUR_CLIENT_KEY_HERE with your client key -->
-    <script type="text/javascript"
-      src="https://app.sandbox.midtrans.com/snap/snap.js"
-      data-client-key="{{config('midtrans.client_key')}}"></script>
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ config('midtrans.client_key') }}"></script>
     <!-- Note: replace with src="https://app.midtrans.com/snap/snap.js" for Production environment -->
     <title>User Dashboard - DelCafe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
+        body {
+            padding-top: 50px;
+            /* Sesuaikan ini dengan tinggi header */
+        }
+
         .container-header {
             max-width: 600px;
             margin: 0 auto;
@@ -226,7 +231,30 @@
 
         </div>
     </div>
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-left">
+                <h3>Contact Us</h3>
+                <p>Find your food here</p>
+                <p><i class="fa fa-envelope"></i> delcafe@gmail.com</p>
+                <p>
+                    <a href="https://wa.me/6287844043032" target="_blank" class="whatsapp-link">
+                        <i class="fab fa-whatsapp"></i> +628123456789
+                    </a>
+                </p>
+            </div>
+            <div class="footer-right">
+                <img src="{{ asset('logo/icon 1.png') }}" alt="delCafe Logo" class="footer-logo"
+                    style="margin-right: 15px;">
+                <h2>delCafe</h2>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}">
+    </script>
     <script>
         document.querySelector('button').addEventListener('click', function() {
             const orderId = '{{ $order->id }}';
@@ -235,45 +263,45 @@
             console.log('Button clicked, order ID:', orderId);
 
             fetch('{{ route('pay.now') }}', {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    order_id: orderId
-                }),
-            })
-            .then(response => {
-                // Log untuk memeriksa respons dari server
-                console.log('Response from server:', response);
-                return response.json();
-            })
-            .then(data => {
-                if (data.token) {
-                    snap.pay(data.token, {
-                        onSuccess: function(result) {
-                            Swal.fire('Success', 'Pembayaran berhasil!', 'success');
-                            window.location.href = '/order/success';
-                        },
-                        onPending: function(result) {
-                            Swal.fire('Pending', 'Menunggu pembayaran...', 'info');
-                        },
-                        onError: function(result) {
-                            Swal.fire('Error', 'Pembayaran gagal!', 'error');
-                        }
-                    });
-                } else {
-                    // Log jika tidak ada token
-                    console.error('No token received:', data);
-                    Swal.fire('Error', 'Gagal mendapatkan token pembayaran!', 'error');
-                }
-            })
-            .catch(error => {
-                // Log untuk menangani error
-                console.error('Error during fetch:', error);
-                Swal.fire('Error', 'Terjadi kesalahan saat menghubungi server!', 'error');
-            });
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId
+                    }),
+                })
+                .then(response => {
+                    // Log untuk memeriksa respons dari server
+                    console.log('Response from server:', response);
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.token) {
+                        snap.pay(data.token, {
+                            onSuccess: function(result) {
+                                Swal.fire('Success', 'Pembayaran berhasil!', 'success');
+                                window.location.href = '/order/success';
+                            },
+                            onPending: function(result) {
+                                Swal.fire('Pending', 'Menunggu pembayaran...', 'info');
+                            },
+                            onError: function(result) {
+                                Swal.fire('Error', 'Pembayaran gagal!', 'error');
+                            }
+                        });
+                    } else {
+                        // Log jika tidak ada token
+                        console.error('No token received:', data);
+                        Swal.fire('Error', 'Gagal mendapatkan token pembayaran!', 'error');
+                    }
+                })
+                .catch(error => {
+                    // Log untuk menangani error
+                    console.error('Error during fetch:', error);
+                    Swal.fire('Error', 'Terjadi kesalahan saat menghubungi server!', 'error');
+                });
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -284,34 +312,36 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="text/javascript">
-      // For example trigger on button clicked, or any time you need
-      var payButton = document.getElementById('pay-button');
-      payButton.addEventListener('click', function () {
-        // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-        window.snap.pay('{{$snapToken}}', {
-          onSuccess: function(result){
-            /* You may add your own implementation here */
-            // alert("payment success!");
-            window.location.href = '/invoice/{{ $order->id }}';
-            console.log(result);
-          },
-          onPending: function(result){
-            /* You may add your own implementation here */
-            alert("wating your payment!"); console.log(result);
-          },
-          onError: function(result){
-            /* You may add your own implementation here */
-            alert("payment failed!"); console.log(result);
-          },
-          onClose: function(){
-            /* You may add your own implementation here */
-            alert('you closed the popup without finishing the payment');
-          }
-        })
-      });
+        // For example trigger on button clicked, or any time you need
+        var payButton = document.getElementById('pay-button');
+        payButton.addEventListener('click', function() {
+            // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
+            window.snap.pay('{{ $snapToken }}', {
+                onSuccess: function(result) {
+                    /* You may add your own implementation here */
+                    // alert("payment success!");
+                    window.location.href = '/invoice/{{ $order->id }}';
+                    console.log(result);
+                },
+                onPending: function(result) {
+                    /* You may add your own implementation here */
+                    alert("wating your payment!");
+                    console.log(result);
+                },
+                onError: function(result) {
+                    /* You may add your own implementation here */
+                    alert("payment failed!");
+                    console.log(result);
+                },
+                onClose: function() {
+                    /* You may add your own implementation here */
+                    alert('you closed the popup without finishing the payment');
+                }
+            })
+        });
     </script>
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

@@ -49,55 +49,72 @@ class ProdukApiController extends Controller
     // 2. Tambah produk
     public function store(Request $request)
     {
-        $request->validate([
-            'judul' => 'required',
-            'kategori_id' => 'required',
-            'stok' => 'required',
-            'deskripsi' => 'required',
-            'harga' => 'required|numeric',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048'
-        ]);
-
-        if ($request->hasFile('gambar')) {
-            $file = $request->file('gambar');
-            $nama_file = time() . "_" . $file->getClientOriginalName();
-            $file->move(public_path('gambar'), $nama_file);
-
-            $produk = Produk::create([
-                'judul' => $request->judul,
-                'kategori_id' => $request->kategori_id,
-                'stok' => $request->stok,
-                'deskripsi' => $request->deskripsi,
-                'harga' => $request->harga,
-                'gambar' => $nama_file
+        try {
+            $request->validate([
+                'judul' => 'required|string|max:255',
+                'kategori_id' => 'required|exists:kategori,id',
+                'stok' => 'required|integer|min:1',
+                'harga' => 'required|integer|min:0',
+                'deskripsi' => 'required|string',
+                'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048'
             ]);
-        }
 
-        $response = [
-            'success' => true,
-            'message' => 'Produk berhasil ditambahkan',
-            'data' => $produk,
-            '_links' => [
-                'self' => [
-                    'href' => route('produk.show', $produk->id)
-                ],
-                'update' => [
-                    'href' => route('produk.update', $produk->id),
-                    'method' => 'PUT'
-                ],
-                'delete' => [
-                    'href' => route('produk.destroy', $produk->id),
-                    'method' => 'DELETE'
-                ],
-                'list' => [
-                    'href' => route('produk.index'),
-                    'method' => 'GET'
+            if ($request->hasFile('gambar')) {
+                $file = $request->file('gambar');
+                $nama_file = time() . "_" . $file->getClientOriginalName();
+                $file->move(public_path('gambar'), $nama_file);
+
+                $produk = Produk::create([
+                    'judul' => $request->judul,
+                    'kategori_id' => $request->kategori_id,
+                    'stok' => $request->stok,
+                    'deskripsi' => $request->deskripsi,
+                    'harga' => $request->harga,
+                    'gambar' => $nama_file
+                ]);
+            }
+
+            $response = [
+                'success' => true,
+                'message' => 'Produk berhasil ditambahkan',
+                'data' => $produk,
+                '_links' => [
+                    'self' => [
+                        'href' => route('produk.show', $produk->id)
+                    ],
+                    'update' => [
+                        'href' => route('produk.update', $produk->id),
+                        'method' => 'PUT'
+                    ],
+                    'delete' => [
+                        'href' => route('produk.destroy', $produk->id),
+                        'method' => 'DELETE'
+                    ],
+                    'list' => [
+                        'href' => route('produk.index'),
+                        'method' => 'GET'
+                    ]
                 ]
-            ]
-        ];
+            ];
 
-        return response()->json($response);
+            return response()->json($response, 200); // 201: Created
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Respons error validasi
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $e->errors()
+            ], 422); // 422: Unprocessable Entity
+        } catch (\Exception $e) {
+            // Respons error umum
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat menambahkan produk',
+                'error' => $e->getMessage()
+            ], 500); // 500: Internal Server Error
+        }
     }
+
 
     // 3. Detail produk
     public function show(Produk $produk)
@@ -125,20 +142,23 @@ class ProdukApiController extends Controller
     }
 
     // 4. Update produk
-    public function update(Request $request, Produk $produk)
-    {
+// 4. Update produk
+public function update(Request $request, Produk $produk)
+{
+    try {
         $request->validate([
-            'judul' => 'required',
-            'kategori_id' => 'required',
-            'stok' => 'required',
-            'deskripsi' => 'required',
-            'harga' => 'required|numeric',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+            'judul' => 'required|string|max:255',
+            'kategori_id' => 'required|exists:kategori,id',
+            'stok' => 'required|integer|min:1',
+            'harga' => 'required|integer|min:0',
+            'deskripsi' => 'required|string',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048' // gambar tidak wajib
         ]);
 
         $nama_file = $produk->gambar;
 
         if ($request->hasFile('gambar')) {
+            // Hapus gambar lama jika ada
             if ($nama_file && file_exists(public_path('gambar/' . $nama_file))) {
                 unlink(public_path('gambar/' . $nama_file));
             }
@@ -148,6 +168,7 @@ class ProdukApiController extends Controller
             $file->move(public_path('gambar'), $nama_file);
         }
 
+        // Update produk
         $produk->update([
             'judul' => $request->judul,
             'kategori_id' => $request->kategori_id,
@@ -176,8 +197,24 @@ class ProdukApiController extends Controller
             ]
         ];
 
-        return response()->json($response);
+        return response()->json($response, 200); // 200: OK
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        // Respons error validasi
+        return response()->json([
+            'success' => false,
+            'message' => 'Validasi gagal',
+            'errors' => $e->errors()
+        ], 422); // 422: Unprocessable Entity
+    } catch (\Exception $e) {
+        // Respons error umum
+        return response()->json([
+            'success' => false,
+            'message' => 'Terjadi kesalahan saat memperbarui produk',
+            'error' => $e->getMessage()
+        ], 500); // 500: Internal Server Error
     }
+}
+
 
     // 5. Hapus produk
     public function destroy(Produk $produk)

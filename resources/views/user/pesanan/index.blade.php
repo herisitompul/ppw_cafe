@@ -171,6 +171,7 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .summary-actions a button {
             background-color: #0066ff;
             color: #fff;
@@ -206,10 +207,12 @@
             border-radius: 8px;
             margin-top: 20px;
         }
+
         .no-orders h2 {
             color: #666;
             margin-bottom: 20px;
         }
+
         .no-orders p {
             color: #999;
         }
@@ -219,7 +222,7 @@
 <body>
     @include('user.layout.header')
 
-    @if($orders->count() > 0)
+    @if ($orders->count() > 0)
         @foreach ($orders as $order)
             <div class="container-header mt-5">
                 <div class="order-header">
@@ -265,14 +268,14 @@
                     <a href="{{ route('order.review', $order->id) }}">
                         <button class="mx-2" type="button">Berikan Ulasan</button>
                     </a>
-                    <form action="{{route('cancel.order', $order->id)}}" method="POST">
+                    <form action="{{ route('cancel.order', $order->id) }}" method="POST">
                         @csrf
                         @method('PUT')
                         @if ($order->status == 'pending')
-                        <button type="submit">Batalkan Pesanan</button>
+                            <button type="submit">Batalkan Pesanan</button>
                         @elseif ($order->status == 'cancel')
                         @else
-                        <button disabled type="submit">Batalkan Pesanan</button>
+                            <button disabled type="submit">Batalkan Pesanan</button>
                         @endif
                     </form>
                 </div>
@@ -287,6 +290,29 @@
             </div>
         </div>
     @endif
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-left">
+                <h3>Contact Us</h3>
+                <p>Find your food here</p>
+                <p><i class="fa fa-envelope"></i> delcafe@gmail.com</p>
+                <p>
+                    {{-- <i class="fa fa-phone"></i>  --}}
+                    <a href="https://wa.me/6287844043032" target="_blank" class="whatsapp-link">
+                        <i class="fab fa-whatsapp"></i> +628123456789
+                    </a>
+                </p>
+            </div>
+            <div class="footer-right">
+                <img src="{{ asset('logo/icon 1.png') }}" alt="delCafe Logo" class="footer-logo"
+                    style="margin-right: 15px;">
+                <h2>delCafe</h2>
+            </div>
+        </div>
+    </footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script>
 </head>
 
@@ -88,6 +89,11 @@
         </div>
     </header> --}}
     @include('user.layout.header')
+    @if (isset($message))
+        <div class="alert alert-warning text-center" role="alert">
+            {{ $message }}
+        </div>
+    @endif
 
     <!-- Carousel Section -->
     <div id="carouselExampleIndicators" class="carousel slide mx-2 my-2" data-ride="carousel">
