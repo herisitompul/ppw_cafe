@@ -8,3 +8,9 @@ Del Cafe is a website designed to help users view the food and beverage menu off
 ## Contributing
 
 Thank you for considering contributing to the Laravel framework! Thanks to group 07 PABWE
+
+## Warning
+This project is protected by copyright. Use, alteration, or redistribution without permission from the owner is strictly prohibited.
+
+#### Copyright © 2024 [Heri Sitompul]
+All rights reserved. This project may not be copied, used, or modified without explicit permission.
