@@ -1,8 +1,12 @@
 .header {
-    background-color: #0000000a;
-    padding: 10px 20px;
-    border-bottom: 1px solid #e0e0e0b4;
-  }
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Pastikan header berada di atas elemen lainnya */
+    background-color: white; /* Tambahkan warna latar untuk menghindari tumpang tindih */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Opsional: tambahkan bayangan untuk estetika */
+}
 
   .container {
     display: flex;

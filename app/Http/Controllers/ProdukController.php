@@ -31,12 +31,12 @@ class ProdukController extends Controller
     {
         // Validasi input
         $request->validate([
-            'judul' => 'required',
-            'kategori_id'=>'required',
-            'stok'=>'required',
-            'deskripsi' => 'required',
-            'harga' => 'required|numeric',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+            'judul' => 'required|string|max:255',
+            'kategori_id' => 'required|exists:kategori,id',
+            'stok' => 'required|integer|min:1',
+            'harga' => 'required|integer|min:0',
+            'deskripsi' => 'required|string',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         // Proses upload gambar
@@ -196,16 +196,23 @@ public function searchProduct(Request $request)
     $keyword = $request->input('search');
     $userId = auth()->id();
     $keranjang = Keranjang::where('user_id', $userId)->first();
-    $cartItem = CartItem::where('keranjang_id', $keranjang->id)->get();
+    $cartItem = $keranjang ? CartItem::where('keranjang_id', $keranjang->id)->get() : collect();
     $cartCount = $cartItem->count();
 
     // Cari produk berdasarkan judul
     $produks = Produk::where('judul', 'like', '%' . $keyword . '%')->get();
     $kategori = Kategori::where('nama', 'like', '%' . $keyword . '%')->get();
 
+    // Tentukan pesan jika tidak ada hasil
+    $message = null;
+    if ($produks->isEmpty() && $kategori->isEmpty()) {
+        $message = "Tidak ada produk atau kategori yang ditemukan untuk kata kunci '{$keyword}'.";
+    }
+
     // Kembalikan view dengan hasil pencarian
-    return view('user.dashboard1', compact('produks', 'kategori', 'cartItem', 'cartCount'));
+    return view('user.dashboard1', compact('produks', 'kategori', 'cartItem', 'cartCount', 'message'));
 }
+
 
 public function myOrder()
 {
@@ -221,11 +228,11 @@ public function myOrder()
 
 public function daftar()
 {
-
-    $orders = Order::with(['orderItem.produk.kategori'])->latest()->get();
+    $orders = Order::with(['orderItem.produk.kategori', 'user'])->latest()->paginate(5); // Tambahkan pagination (5 data per halaman)
 
     return view('produk.daftar', compact('orders'));
 }
+
 
 public function cancel($id)
 {

@@ -9,9 +9,33 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/header.css') }}">
     <script defer src="https://use.fontawesome.com/releases/v5.8.1/js/all.js"></script>
 
     <style>
+        /* Body and HTML styling for full height layout */
+        html, body {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+
+        /* Main content styling */
+        .content {
+            flex-grow: 1;
+        }
+
+        /* Footer styling */
+        .footer {
+            background-color: #7ca577;
+            padding: 20px;
+            /* text-align: center; */
+            margin-top: auto;
+            justify-content: center;
+            align-items: center;
+        }
+
         .booking-card {
             border: 1px solid #ddd;
             border-radius: 5px;
@@ -45,11 +69,12 @@
 <body>
     @include('user.layout.header')
 
-    <div class="container mt-5 mb-5">
+    <!-- Main content area -->
+    <div class="container content mt-5 mb-5">
         <div class="row w-100">
             <!-- Left Section -->
             <div class="col-md-8">
-                <div class="d-flex align-items-center mb-3">
+                <div class="d-flex align-items-center mb-3 mt-5">
                     <input type="checkbox" class="form-check-input checkbox-custom" id="select-all">
                     <label for="select-all" class="form-label mb-0">All</label>
                 </div>
@@ -108,6 +133,29 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-left">
+                <h3>Contact Us</h3>
+                <p>Find your food here</p>
+                <p><i class="fa fa-envelope"></i> delcafe@gmail.com</p>
+                <p>
+                    <a href="https://wa.me/6287844043032" target="_blank" class="whatsapp-link">
+                        <i class="fab fa-whatsapp"></i> +628123456789
+                    </a>
+                </p>
+            </div>
+            <div class="footer-right">
+                <img src="{{ asset('logo/icon 1.png') }}" alt="delCafe Logo" class="footer-logo"
+                    style="margin-right: 15px;">
+                <h2>delCafe</h2>
+            </div>
+        </div>
+    </footer>
+
 
         <script>
             $(document).ready(function() {
